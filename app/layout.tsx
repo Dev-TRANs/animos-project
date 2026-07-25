@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Kiwi_Maru, Manrope } from "next/font/google";
+import { Kiwi_Maru } from "next/font/google";
 import "./globals.css";
 
 const kiwiMaru = Kiwi_Maru({
@@ -9,14 +9,8 @@ const kiwiMaru = Kiwi_Maru({
   display: "swap",
 });
 
-const manrope = Manrope({
-  variable: "--font-manrope",
-  subsets: ["latin"],
-  display: "swap",
-});
-
 export const metadata: Metadata = {
-  metadataBase: new URL("https://animos-project.openai.site"),
+  metadataBase: new URL("https://animos-project.montblancabc.chatgpt.site"),
   title: {
     default: "アニモスプロジェクト",
     template: "%s｜アニモスプロジェクト",
@@ -35,8 +29,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: "/og.png",
-        width: 1733,
-        height: 909,
+        width: 1792,
+        height: 896,
         alt: "いつものつながりが、もしもの命を支える。 ANIMOS PROJECT",
       },
     ],
@@ -56,7 +50,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <body className={`${kiwiMaru.variable} ${manrope.variable}`}>
+      <body className={kiwiMaru.variable}>
         {children}
       </body>
     </html>
