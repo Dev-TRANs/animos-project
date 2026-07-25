@@ -46,11 +46,11 @@ export default function Home() {
   return (
     <main>
       <header className="site-header">
-        <a href="#top" className="header-brand">
+        <a href="/" className="header-brand">
           <Logo />
         </a>
         <nav className="desktop-nav" aria-label="メインナビゲーション">
-          <a href="#about">ABOUT</a>
+          <a href="/about">ABOUT</a>
           <a href="#activities">ACTION</a>
           <a href="#news">NEWS</a>
           <a className="header-cta" href="#contact">LET&apos;S CONNECT ↗</a>
@@ -58,7 +58,7 @@ export default function Home() {
         <details className="mobile-menu">
           <summary aria-label="メニューを開く"><i /><i /></summary>
           <nav>
-            <a href="#about">私たちについて</a>
+            <a href="/about">私たちについて</a>
             <a href="#activities">活動内容</a>
             <a href="#news">お知らせ</a>
             <a href="#contact">参加・連携</a>
@@ -184,6 +184,14 @@ export default function Home() {
       </section>
 
       <section className="missions">
+        <img
+          className="prop prop-emergency-radio"
+          src="/prop-emergency-radio.png"
+          alt=""
+          aria-hidden="true"
+          width="1536"
+          height="1024"
+        />
         <div className="wrap">
           <div className="missions-head">
             <h2>アニモスが、<br />目指すこと。</h2>
@@ -218,6 +226,14 @@ export default function Home() {
       </section>
 
       <section className="actions wrap" id="activities">
+        <img
+          className="prop prop-megaphone"
+          src="/prop-megaphone.png"
+          alt=""
+          aria-hidden="true"
+          width="1536"
+          height="1024"
+        />
         <div className="actions-head">
           <h2>現在取り組んでいる、<br />4つのテーマ。</h2>
           <p>アプリケーション開発を中心に、調査・検討を進めています。</p>
@@ -235,64 +251,32 @@ export default function Home() {
             </article>
           ))}
         </div>
-        <div className="project-details">
-          <article>
-            <span>WELFARE × DIGITAL</span>
-            <h3>福祉におけるデジタル支援</h3>
-            <p>
-              要支援者といっても、身体の状態や必要な支援は一人ひとり異なります。スマートフォンを貸し出すことや、VRゴーグルで災害の状況を疑似体験することなど、デジタルを使って何ができるのかを考えています。
-            </p>
-            <div className="question-list">
-              <p>要支援者ではない人は、どのような支援ができるかを知っているだろうか。</p>
-              <p>要支援者は、どのような支援を必要とし、どのような思いを持っているだろうか。</p>
-            </div>
-            <b>この二つのすれ違いを減らし、つなげることを目指しています。</b>
-          </article>
-          <article className="game-project">
-            <span>NOW DEVELOPING</span>
-            <h3>「遊び」が「命を守る訓練」になる。</h3>
-            <p>
-              「防災 × 鬼ごっこ」をテーマにしたアプリを開発中です。災害エリアから逃げながら避難所を目指すゲームを通して、子ども世代にも楽しみながら生き残る力を届けます。
-            </p>
-            <ul>
-              <li>避難行動</li>
-              <li>危険区域の把握</li>
-              <li>地図理解</li>
-              <li>状況判断</li>
-            </ul>
-          </article>
-        </div>
-      </section>
-
-      <section className="connection">
-        <div className="wrap connection-inner">
-          <p>ALL-PARTICIPATION DISASTER PREVENTION NETWORK</p>
-          <h2>
-            要支援者 <i>×</i> 地域住民 <i>×</i> 若者
-            <br />
-            福祉 <i>×</i> 防災 <i>×</i> デジタル
-          </h2>
-          <div>
-            <b>住民全員が参加する防災ネットワークへ。</b>
-            <p>要支援者もそうでない方も、危険箇所や避難経路を住民同士で共有・可視化し、地域の横のつながりを強める仕組みを目指します。</p>
-          </div>
-        </div>
+        <a className="detail-link" href="/about">活動の背景と詳しい内容を見る <b>↗</b></a>
       </section>
 
       <section className="news wrap" id="news">
+        <img
+          className="prop prop-first-aid"
+          src="/prop-first-aid.png"
+          alt=""
+          aria-hidden="true"
+          width="1536"
+          height="1024"
+        />
         <div className="news-head">
-          <h2>動き出したことを、<br />ここに記録していく。</h2>
+          <h2>ニュース</h2>
+          <p>活動のお知らせや、プロジェクトの記録を発信します。</p>
         </div>
         <div className="news-items">
           <article>
             <time>2026.07</time>
-            <span>PROJECT</span>
+            <span>お知らせ</span>
             <h3>アニモスプロジェクト、ウェブサイトを公開しました</h3>
             <b>↗</b>
           </article>
           <article>
-            <time>COMING SOON</time>
-            <span>JOURNAL</span>
+            <time>準備中</time>
+            <span>活動記録</span>
             <h3>これからの活動や街で見つけた問いを発信します</h3>
             <b>↗</b>
           </article>
@@ -318,7 +302,7 @@ export default function Home() {
           <Logo />
           <p>防災を、難しくて遠いものから、<br />誰でも触れられるものへ。</p>
           <nav>
-            <a href="#about">ABOUT</a>
+            <a href="/about">ABOUT</a>
             <a href="#activities">ACTION</a>
             <a href="#news">NEWS</a>
             <a href="#contact">CONTACT</a>
