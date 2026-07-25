@@ -1,22 +1,22 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "アニモスプロジェクト｜防災を、日常のカルチャーへ。",
+  title: "アニモスプロジェクト｜防災を、誰でも触れられるものへ。",
   description:
-    "防災・福祉・情報をつなぎ、誰も取り残されない地域をつくるアニモスプロジェクト。",
+    "地域における防災・災害情報の共有や意識向上を目的に、アプリケーション開発を中心としたデジタル活用に取り組む団体です。",
 };
 
 const missions = [
-  ["01", "届ける", "防災・福祉の情報を、誰もが使いやすいかたちにする。"],
-  ["02", "つなぐ", "地域・行政・学校・企業・福祉団体の関係を育てる。"],
-  ["03", "つくる", "ICTとデジタルの力で、地域の課題を解決する。"],
+  ["01", "日常化", "若者や地域住民が、普段の生活の中で楽しみながら防災意識を持てる社会を目指します。"],
+  ["02", "共有・可視化", "危険箇所や避難経路の情報を、住民同士でリアルタイムに共有・可視化できる仕組みをつくります。"],
+  ["03", "全員参加", "要支援者もそうでない方も、住民同士の横のつながりを強める防災ネットワークを目指します。"],
 ];
 
 const activities = [
-  ["準備中", "福祉施設との連携", "現場の声から、一緒に考える。"],
-  ["計画中", "アンケート調査", "本当に必要な情報を、丁寧に知る。"],
-  ["構想中", "防災アプリの開発", "情報が届き、助け合える仕組みをつくる。"],
-  ["計画中", "防災イベント", "学びと対話を、街の日常にひらく。"],
+  ["検討中", "デジタルハザードマップ", "地域の危険箇所や避難所、避難ルートを可視化・共有し、災害発生時の迅速な行動につなげます。"],
+  ["検討中", "要支援者へのデジタル支援", "スマートフォンの貸し出しやVRゴーグルの活用など、身体の状態に応じて何ができるかを考えています。"],
+  ["調査・検討中", "要支援者と地域住民をつなぐ", "支援する側と支援を必要とする側、それぞれの思いや必要な支援を知り、すれ違いを減らす取り組みです。"],
+  ["開発中", "防災 × 鬼ごっこアプリ", "遊びながら避難行動、危険区域、地図理解、状況判断を学べるアプリを開発しています。"],
 ];
 
 function Logo({ full = false }: { full?: boolean }) {
@@ -76,72 +76,78 @@ export default function Home() {
         />
         <div className="hero-shade" />
         <div className="hero-content">
-          <p className="hero-kicker">
-            <span>ANIMOS PROJECT</span>
-            <span>EST. 2026 / JAPAN</span>
-          </p>
           <h1>
-            いつもの
+            防災を、
             <br />
-            つながりが、
+            誰でも
             <br />
-            <em>もしも</em>を支える。
+            <em>触れられるもの</em>へ。
           </h1>
           <div className="hero-bottom">
             <p>
-              防災・福祉・情報をつなぎ、
+              アプリケーション開発を中心に、
               <br />
-              誰も取り残されない地域をつくる。
+              地域の防災・災害情報の共有と意識向上に取り組みます。
             </p>
             <a href="#about">SCROLL TO DISCOVER <span>↓</span></a>
           </div>
         </div>
         <span className="visual-note">※ イメージビジュアル</span>
-        <div className="hero-sticker">防災を、<br />日常の文化へ。</div>
+        <img
+          className="prop prop-sticky-notes"
+          src="/prop-sticky-notes.png"
+          alt=""
+          aria-hidden="true"
+          width="1254"
+          height="1254"
+        />
       </section>
 
       <div className="culture-ticker" aria-label="ブランドメッセージ">
         <div>
-          <span>DIFFERENT, BUT CONNECTED.</span>
-          <b>違うまま、つながる。</b>
-          <span>DIFFERENT, BUT CONNECTED.</span>
-          <b>違うまま、つながる。</b>
+          <span>DISASTER PREVENTION × DIGITAL</span>
+          <b>防災を、難しくて遠いものから、誰でも触れられるものへ。</b>
+          <span>DISASTER PREVENTION × DIGITAL</span>
+          <b>防災を、難しくて遠いものから、誰でも触れられるものへ。</b>
         </div>
       </div>
 
       <section className="manifesto wrap" id="about">
-        <div className="section-label">
-          <span>01</span>
-          <b>WHO WE ARE</b>
-        </div>
         <div className="manifesto-copy">
-          <p className="small-heading">ANIMOS PROJECT IS...</p>
           <h2>
-            備えることを、
+            地域の防災を、
             <br />
-            <em>もっと日常に。</em>
+            <em>デジタルでもっと身近に。</em>
           </h2>
           <div className="manifesto-text">
             <p className="lead">
-              防災を「特別なこと」から、
+              高校生や地域住民が、
               <br />
-              この街のカルチャーへ。
+              普段から防災意識を持てる仕組みを。
             </p>
             <p>
-              災害が起きてから、はじめてつながるのでは遅い。いつもの会話、いつもの場所、いつもの仲間。その関係性が、もしものときに情報と支援を届ける道になります。アニモスは、防災・福祉・情報を横断しながら、地域の新しいつながり方を提案するプロジェクトです。
+              いつ起こるかわからない自然災害に対して、避難ルートや危険箇所の情報を、普段からわかりやすく共有・認知できる仕組みが必要です。アニモスプロジェクトは、この課題意識からスタートした、デジタル活用を中心とする新しい取り組みです。
             </p>
           </div>
         </div>
         <aside className="quote-card">
+          <img
+            className="prop prop-binder-clip"
+            src="/prop-binder-clip.png"
+            alt=""
+            aria-hidden="true"
+            width="1254"
+            height="1254"
+          />
           <span>OUR PHILOSOPHY</span>
           <blockquote>
-            情報でつながり、
+            防災を、
             <br />
-            支え合い、
+            難しくて遠いもの
             <br />
-            命を守る。
+            にしない。
           </blockquote>
-          <p>誰一人取り残されない防災社会の実現へ。</p>
+          <p>アプリケーション開発を中心に活動しています。</p>
         </aside>
       </section>
 
@@ -154,16 +160,24 @@ export default function Home() {
             height="1536"
           />
           <span>IMAGE VISUAL / 2026</span>
+          <img
+            className="prop prop-orange-sticker"
+            src="/prop-orange-sticker.png"
+            alt=""
+            aria-hidden="true"
+            width="1254"
+            height="1254"
+          />
         </div>
         <div className="photo-story">
-          <span className="story-number">CULTURE 001</span>
+          <span className="story-number">DIGITAL HAZARD MAP</span>
           <h2>
-            情報を、
+            地域の情報を、
             <br />
-            <em>手渡せる距離</em>に。
+            <em>わかりやすく共有する。</em>
           </h2>
           <p>
-            便利な情報も、必要な人に届かなければ意味がない。デジタルだけに頼らず、対話や紙、場所や人を組み合わせる。伝え方の選択肢を増やすことも、防災です。
+            地域の危険箇所や避難所、避難ルートなどを可視化・共有し、災害発生時に迅速な行動が取れるデジタルハザードマップの開発を検討しています。住民自身が参加し、情報を更新・共有できる仕組みを目指します。
           </p>
           <a href="#activities">私たちのアクションを見る ↘</a>
         </div>
@@ -172,12 +186,8 @@ export default function Home() {
       <section className="missions">
         <div className="wrap">
           <div className="missions-head">
-            <div className="section-label light-label">
-              <span>02</span>
-              <b>OUR MISSION</b>
-            </div>
-            <h2>つながりを、<br />社会の力に。</h2>
-            <p>3つの方向から、日常の関係性を地域の備えに変えていきます。</p>
+            <h2>アニモスが、<br />目指すこと。</h2>
+            <p>防災意識の日常化と、住民全員が参加できる情報共有の仕組みを目指します。</p>
           </div>
           <div className="mission-rows">
             {missions.map(([num, title, text]) => (
@@ -200,21 +210,17 @@ export default function Home() {
           height="1024"
         />
         <div className="culture-scene-copy">
-          <span>THIS IS OUR KIND OF PREPAREDNESS.</span>
-          <h2>街で会う。話す。<br />それが、備えになる。</h2>
-          <p>防災は、非常時だけのものじゃない。</p>
+          <span>DISASTER PREVENTION IN EVERYDAY LIFE.</span>
+          <h2>若者も地域住民も、<br />普段から防災を考える。</h2>
+          <p>防災意識を、難しくて遠いものではなく、日常の中で持てるものに。</p>
         </div>
         <span className="visual-note">※ イメージビジュアル</span>
       </section>
 
       <section className="actions wrap" id="activities">
         <div className="actions-head">
-          <div className="section-label">
-            <span>03</span>
-            <b>WHAT WE DO</b>
-          </div>
-          <h2>いまから始める、<br />4つのアクション。</h2>
-          <p>活動状況は誤解のないよう、現在のステータスを明記しています。</p>
+          <h2>現在取り組んでいる、<br />4つのテーマ。</h2>
+          <p>アプリケーション開発を中心に、調査・検討を進めています。</p>
         </div>
         <div className="action-list">
           {activities.map(([status, title, text], index) => (
@@ -229,29 +235,52 @@ export default function Home() {
             </article>
           ))}
         </div>
+        <div className="project-details">
+          <article>
+            <span>WELFARE × DIGITAL</span>
+            <h3>福祉におけるデジタル支援</h3>
+            <p>
+              要支援者といっても、身体の状態や必要な支援は一人ひとり異なります。スマートフォンを貸し出すことや、VRゴーグルで災害の状況を疑似体験することなど、デジタルを使って何ができるのかを考えています。
+            </p>
+            <div className="question-list">
+              <p>要支援者ではない人は、どのような支援ができるかを知っているだろうか。</p>
+              <p>要支援者は、どのような支援を必要とし、どのような思いを持っているだろうか。</p>
+            </div>
+            <b>この二つのすれ違いを減らし、つなげることを目指しています。</b>
+          </article>
+          <article className="game-project">
+            <span>NOW DEVELOPING</span>
+            <h3>「遊び」が「命を守る訓練」になる。</h3>
+            <p>
+              「防災 × 鬼ごっこ」をテーマにしたアプリを開発中です。災害エリアから逃げながら避難所を目指すゲームを通して、子ども世代にも楽しみながら生き残る力を届けます。
+            </p>
+            <ul>
+              <li>避難行動</li>
+              <li>危険区域の把握</li>
+              <li>地図理解</li>
+              <li>状況判断</li>
+            </ul>
+          </article>
+        </div>
       </section>
 
       <section className="connection">
         <div className="wrap connection-inner">
-          <p>NEIGHBORHOOD</p>
+          <p>ALL-PARTICIPATION DISASTER PREVENTION NETWORK</p>
           <h2>
-            地域住民 <i>×</i> 福祉団体 <i>×</i> 学校
+            要支援者 <i>×</i> 地域住民 <i>×</i> 若者
             <br />
-            行政 <i>×</i> 企業 <i>×</i> 地域団体
+            福祉 <i>×</i> 防災 <i>×</i> デジタル
           </h2>
           <div>
-            <b>ひとつが途切れても、別の道でつながれる。</b>
-            <p>中心も、支える側・支えられる側も固定しない。複数の接点を持つ、しなやかな地域へ。</p>
+            <b>住民全員が参加する防災ネットワークへ。</b>
+            <p>要支援者もそうでない方も、危険箇所や避難経路を住民同士で共有・可視化し、地域の横のつながりを強める仕組みを目指します。</p>
           </div>
         </div>
       </section>
 
       <section className="news wrap" id="news">
         <div className="news-head">
-          <div className="section-label">
-            <span>04</span>
-            <b>NEWS &amp; JOURNAL</b>
-          </div>
           <h2>動き出したことを、<br />ここに記録していく。</h2>
         </div>
         <div className="news-items">
@@ -274,8 +303,8 @@ export default function Home() {
         <div className="join-brand"><Logo full /></div>
         <div className="join-copy">
           <span>JOIN THE PROJECT</span>
-          <h2>一緒に、つながりを<br />育てませんか。</h2>
-          <p>地域、行政、学校、企業、福祉団体。<br />立場を越えてできることを、一緒に考えましょう。</p>
+          <h2>アニモスの活動を、<br />知ってください。</h2>
+          <p>今後、活動を知ってもらい、支援してもらうためのアプリ開発やイベントでの活用も進めています。</p>
           <div className="join-links">
             <span>連携・協働を相談する <b>↗</b></span>
             <span>活動について問い合わせる <b>↗</b></span>
@@ -287,7 +316,7 @@ export default function Home() {
       <footer>
         <div className="wrap footer-inner">
           <Logo />
-          <p>防災・福祉・情報をつなぎ、<br />誰も取り残されない地域をつくる。</p>
+          <p>防災を、難しくて遠いものから、<br />誰でも触れられるものへ。</p>
           <nav>
             <a href="#about">ABOUT</a>
             <a href="#activities">ACTION</a>
@@ -297,7 +326,7 @@ export default function Home() {
         </div>
         <div className="wrap footer-bottom">
           <span>© 2026 ANIMOS PROJECT</span>
-          <span>DIFFERENT, BUT CONNECTED.</span>
+          <span>DISASTER PREVENTION × DIGITAL</span>
         </div>
       </footer>
     </main>
