@@ -8,7 +8,7 @@
   --paper: #f7f6f0;
   --ink: #102f3f;
   --muted: #61747c;
-  --kiwi: var(--font-kiwi), "Hiragino Maru Gothic ProN", "Yu Gothic", sans-serif;
+  --kiwi: "Kiwi Maru", "Hiragino Maru Gothic ProN", "Yu Gothic", sans-serif;
 }
 
 * { box-sizing: border-box; }
@@ -21,7 +21,7 @@ body {
   font-size: 16px;
   line-height: 1.85;
 }
-body, button, input, textarea { font-family: var(--kiwi); }
+body, button, input, textarea, select, summary { font-family: var(--kiwi); }
 img { display: block; max-width: 100%; }
 a { color: inherit; text-decoration: none; }
 a:focus-visible, summary:focus-visible { outline: 3px solid var(--orange); outline-offset: 4px; }

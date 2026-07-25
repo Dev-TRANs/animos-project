@@ -1,13 +1,5 @@
 import type { Metadata } from "next";
-import { Kiwi_Maru } from "next/font/google";
 import "./globals.css";
-
-const kiwiMaru = Kiwi_Maru({
-  variable: "--font-kiwi",
-  subsets: ["latin"],
-  weight: ["300", "400", "500"],
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://animos-project.montblancabc.chatgpt.site"),
@@ -50,9 +42,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <body className={kiwiMaru.variable}>
-        {children}
-      </body>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@300;400;500&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body>{children}</body>
     </html>
   );
 }
