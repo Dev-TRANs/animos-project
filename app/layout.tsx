@@ -1,26 +1,32 @@
 import type { Metadata } from "next";
+import { withBasePath } from "./base-path";
 import "./globals.css";
 
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  "https://animos-project.montblancabc.chatgpt.site";
+const siteOrigin = new URL(siteUrl).origin;
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://animos-project.montblancabc.chatgpt.site"),
+  metadataBase: new URL(siteOrigin),
   title: {
     default: "アニモスプロジェクト",
     template: "%s｜アニモスプロジェクト",
   },
   description:
-    "防災・福祉・情報をつなぎ、誰も取り残されない地域をつくるアニモスプロジェクト。",
+    "誰も取り残さない地域防災を。デジタルの力で地域の防災・福祉・情報をつなぐアニモスプロジェクト。",
   icons: {
-    icon: "/animos-logo.png",
-    shortcut: "/animos-logo.png",
+    icon: withBasePath("/animos-logo.png"),
+    shortcut: withBasePath("/animos-logo.png"),
   },
   openGraph: {
-    title: "いつものつながりが、もしもの命を支える。",
-    description: "防災・福祉・情報をつなぎ、誰も取り残されない地域をつくる。",
+    title: "誰も取り残さない地域防災を。",
+    description: "デジタルの力で地域の防災・福祉・情報をつなぐ。",
     type: "website",
     locale: "ja_JP",
     images: [
       {
-        url: "/og.png",
+        url: withBasePath("/og.png"),
         width: 1792,
         height: 896,
         alt: "いつものつながりが、もしもの命を支える。 ANIMOS PROJECT",
@@ -29,9 +35,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "いつものつながりが、もしもの命を支える。",
-    description: "防災・福祉・情報をつなぎ、誰も取り残されない地域をつくる。",
-    images: ["/og.png"],
+    title: "誰も取り残さない地域防災を。",
+    description: "デジタルの力で地域の防災・福祉・情報をつなぐ。",
+    images: [withBasePath("/og.png")],
   },
 };
 
@@ -46,11 +52,11 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@300;400;500&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap"
           rel="stylesheet"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Afacad:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
       </head>

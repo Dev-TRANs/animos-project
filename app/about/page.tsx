@@ -1,146 +1,104 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { withBasePath } from "../base-path";
+import { InteriorFooter, InteriorHeader, InteriorHero } from "../components/InteriorPage";
 
 export const metadata: Metadata = {
-  title: "私たちについて",
-  description:
-    "アニモスプロジェクトが生まれた背景、地域防災・福祉・アプリケーション開発への取り組みを紹介します。",
+  title: "About Us",
+  description: "アニモスプロジェクトが目指す、誰も取り残さない地域防災についてご紹介します。",
 };
 
-function Logo() {
-  return (
-    <span className="logo-lockup" aria-label="ANIMOS PROJECT">
-      <span className="logo-crop" aria-hidden="true">
-        <img src="/animos-logo.png" alt="" width="140" height="140" />
-      </span>
-      <span>ANIMOS PROJECT</span>
-    </span>
-  );
-}
+const values = [
+  {
+    number: "01",
+    title: "人を第一に考える",
+    text: "仕組みや技術から考えるのではなく、そこに暮らす一人ひとりの状況や声から始めます。年齢や障害、言語などにかかわらず、必要な人に届く形を考え続けます。",
+    image: withBasePath("/assets/about-community.svg"),
+  },
+  {
+    number: "02",
+    title: "地域との協力を大切にする",
+    text: "地域をよく知る住民のみなさん、自治体、企業、学校、団体と対話し、それぞれの知識や経験を持ち寄りながら、地域に合った答えを一緒につくります。",
+    image: withBasePath("/assets/about-map.svg"),
+  },
+  {
+    number: "03",
+    title: "テクノロジーを身近な課題解決に活用する",
+    text: "デジタルを目的にせず、情報が届かない、支援につながりにくいといった身近な課題を解決するための道具として、わかりやすく使いやすい形で活用します。",
+    image: withBasePath("/assets/about-connect.svg"),
+  },
+  {
+    number: "04",
+    title: "防災を日常の一部にする",
+    text: "防災を災害時だけのものにせず、普段の学びや地域のつながり、情報共有の中に取り入れます。日常の小さな備えが、もしものときの安心につながる状態を目指します。",
+    image: withBasePath("/assets/about-app.svg"),
+  },
+];
 
 export default function AboutPage() {
   return (
-    <main className="about-page">
-      <header className="site-header">
-        <a href="/" className="header-brand"><Logo /></a>
-        <nav className="desktop-nav" aria-label="メインナビゲーション">
-          <a href="/about">ABOUT</a>
-          <a href="/#activities">ACTION</a>
-          <a href="/#news">NEWS</a>
-          <a className="header-cta" href="/#contact">LET&apos;S CONNECT ↗</a>
-        </nav>
-        <details className="mobile-menu">
-          <summary aria-label="メニューを開く"><i /><i /></summary>
-          <nav>
-            <a href="/about">私たちについて</a>
-            <a href="/#activities">活動内容</a>
-            <a href="/#news">ニュース</a>
-            <a href="/#contact">参加・連携</a>
-          </nav>
-        </details>
-      </header>
-
-      <section className="about-hero">
-        <div className="wrap">
-          <p>私たちについて</p>
-          <h1>地域の防災を、<br /><em>デジタルでもっと身近に。</em></h1>
-          <div className="about-hero-intro">
-            <b>アニモスプロジェクトは、地域における防災・災害情報の共有や意識向上を目的に活動する団体です。</b>
-            <p>アプリケーション開発を中心に、高校生や地域住民が普段から防災を考え、情報を共有できる新しい仕組みをつくろうとしています。</p>
-          </div>
-        </div>
-        <img className="prop about-radio" src="/prop-emergency-radio.png" alt="" aria-hidden="true" width="1536" height="1024" />
+    <main className="interior-page about-page">
+      <InteriorHeader current="About Us" />
+      <InteriorHero
+        eyebrow="ABOUT US"
+        title={<>誰一人<br />取り残されない社会へ。</>}
+        lead="私たちは、防災・情報・地域のつながりを組み合わせ、すべての人が日常から安心して暮らせる地域をつくるプロジェクトです。"
+      />
+      <section className="interior-intro">
+        <p className="kicker">WHO WE ARE</p>
+        <h2>防災×情報×地域のつながりで、日常から安心できるまちをつくる。</h2>
+        <p>災害が起きたときだけではなく、普段から必要な情報に触れ、困ったときに支援へつながれること。アニモスプロジェクトは、地域にある知恵と人のつながりにテクノロジーを掛け合わせ、誰も取り残されない仕組みを育てます。</p>
       </section>
 
-      <section className="about-origin wrap">
+      <section className="about-pillars" aria-label="使命と目指す未来">
+        <article>
+          <div>
+            <p className="kicker">OUR MISSION</p>
+            <h2>災害時だけでなく、日常から安心して暮らせる地域をつくる。</h2>
+            <p>必要な情報をわかりやすく届け、地域の中で支え合える関係を育てることで、平時にも災害時にも安心できる暮らしを支えます。</p>
+          </div>
+          <img src={withBasePath("/assets/about-next.svg")} alt="" />
+        </article>
+        <article>
+          <div>
+            <p className="kicker">OUR VISION</p>
+            <h2>すべての人が、必要な情報や支援を受けられる社会へ。</h2>
+            <p>住む場所や年齢、障害の有無にかかわらず、一人ひとりが必要な情報を受け取り、適切な支援につながれる「誰も取り残されない社会」を目指します。</p>
+          </div>
+          <img src={withBasePath("/assets/about-void.svg")} alt="" />
+        </article>
+      </section>
+
+      <div className="about-values-heading">
+        <p className="kicker">OUR VALUES</p>
+        <h2>私たちが大切にする、4つのこと。</h2>
+      </div>
+      <section className="theme-list" aria-label="プロジェクトの4つの価値観">
+        {values.map((theme) => (
+          <article className="theme-card" key={theme.number}>
+            <div className="theme-visual">
+              <span>{theme.number}</span>
+              <img src={theme.image} alt="" />
+            </div>
+            <div className="theme-copy">
+              <p>ANIMOS VALUE {theme.number}</p>
+              <h2>{theme.title}</h2>
+              <p>{theme.text}</p>
+            </div>
+          </article>
+        ))}
+      </section>
+
+      <section className="about-collaboration">
+        <img src={withBasePath("/assets/about-community.svg")} alt="" />
         <div>
-          <span>はじまり</span>
-          <h2>いつ起こるかわからない。<br />だから、普段から考えられる仕組みを。</h2>
+          <p className="kicker">OUR GOAL</p>
+          <h2>立場を越えてつながり、安心して暮らせる社会を一緒につくる。</h2>
+          <p>地域のみなさん、自治体、企業、学校、そして同じ目標を持つ団体と連携し、それぞれの知見や強みを生かしながら、誰もが安心して暮らせる社会づくりに貢献します。</p>
         </div>
-        <p>
-          自然災害に対して、高校生や地域住民が普段から防災意識を持ち、避難ルートや危険箇所の情報をわかりやすく共有・認知できる仕組みが必要であるという課題意識からスタートしました。
-        </p>
       </section>
-
-      <section className="about-projects">
-        <div className="wrap">
-          <h2>取り組んでいること</h2>
-          <article className="about-project">
-            <span>01</span>
-            <div>
-              <h3>デジタルハザードマップ</h3>
-              <p>地域の危険箇所や避難所、避難ルートを可視化・共有し、災害発生時に迅速な行動が取れる仕組みを検討しています。</p>
-              <p>情報を受け取るだけでなく、地域住民自身が参加し、共有・更新できる「全員参加型」のマップを目指します。</p>
-            </div>
-          </article>
-          <article className="about-project">
-            <span>02</span>
-            <div>
-              <h3>福祉におけるデジタル支援</h3>
-              <p>スマートフォンの貸し出しやVRゴーグルによる災害体験など、身体の状態や必要な支援に合わせてデジタルで何ができるかを考えています。</p>
-              <div className="about-questions">
-                <p>支援する側は、どのような支援ができるかを知っているだろうか。</p>
-                <p>支援を必要とする側は、何を望み、どのような思いを持っているだろうか。</p>
-              </div>
-              <b>二つの思いのすれ違いを減らし、人と人をつなげる取り組みです。</b>
-            </div>
-          </article>
-          <article className="about-project">
-            <span>03</span>
-            <div>
-              <h3>「防災 × 鬼ごっこ」アプリ</h3>
-              <p>災害エリアから逃げながら避難所を目指す。遊びながら、避難行動・危険区域・地図理解・状況判断を自然に学べるアプリを開発しています。</p>
-              <blockquote>「遊び」が「命を守る訓練」になる。</blockquote>
-              <p>防災を難しいものではなく、誰でも触れられるものへ。特に子ども世代へ、楽しみながら生き残る力を届けたいと考えています。</p>
-            </div>
-          </article>
-        </div>
-        <img className="prop about-first-aid" src="/prop-first-aid.png" alt="" aria-hidden="true" width="1536" height="1024" />
-      </section>
-
-      <section className="about-goal">
-        <div className="wrap">
-          <h2>目指す先</h2>
-          <div className="about-goal-grid">
-            <article>
-              <span>01</span>
-              <h3>防災意識の「日常化」</h3>
-              <p>若者や地域住民が、普段の生活の中で楽しみながら防災意識を持てる社会へ。</p>
-            </article>
-            <article>
-              <span>02</span>
-              <h3>災害情報のリアルタイム化</h3>
-              <p>危険箇所や避難経路を、住民同士で共有・可視化できる地域へ。</p>
-            </article>
-            <article>
-              <span>03</span>
-              <h3>全員参加型のネットワーク</h3>
-              <p>要支援者もそうでない方も、横のつながりを強め、支え合える地域へ。</p>
-            </article>
-          </div>
-        </div>
-        <img className="prop about-megaphone" src="/prop-megaphone.png" alt="" aria-hidden="true" width="1536" height="1024" />
-      </section>
-
-      <section className="about-back wrap">
-        <a href="/">トップページへ戻る <b>↗</b></a>
-      </section>
-
-      <footer>
-        <div className="wrap footer-inner">
-          <Logo />
-          <p>防災を、難しくて遠いものから、<br />誰でも触れられるものへ。</p>
-          <nav>
-            <a href="/about">ABOUT</a>
-            <a href="/#activities">ACTION</a>
-            <a href="/#news">NEWS</a>
-            <a href="/#contact">CONTACT</a>
-          </nav>
-        </div>
-        <div className="wrap footer-bottom">
-          <span>© 2026 ANIMOS PROJECT</span>
-          <span>DISASTER PREVENTION × DIGITAL</span>
-        </div>
-      </footer>
+      <Link className="interior-next" href="/actions"><span>取り組みを見る</span><b>→</b></Link>
+      <InteriorFooter />
     </main>
   );
 }
