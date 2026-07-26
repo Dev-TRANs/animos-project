@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { withBasePath } from "../base-path";
 import { InteriorFooter, InteriorHeader, InteriorHero } from "../components/InteriorPage";
 
@@ -39,6 +39,23 @@ export default function NewsIndex() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!items.length) return;
+    const cards = Array.from(document.querySelectorAll<HTMLElement>(".news-index-card"));
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.12 },
+    );
+    cards.forEach((card) => observer.observe(card));
+    return () => observer.disconnect();
+  }, [items]);
+
   return (
     <main className="interior-page news-page">
       <InteriorHeader current="News" />
@@ -69,6 +86,7 @@ export default function NewsIndex() {
             target="_blank"
             rel="noreferrer"
             key={item.url}
+            style={{ "--news-delay": `${Math.min(index, 5) * 70}ms` } as CSSProperties}
           >
             {item.thumbnail && <img src={item.thumbnail} alt="" />}
             <div className="news-index-meta">

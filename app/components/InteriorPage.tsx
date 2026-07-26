@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { siteLinks } from "../site-config";
+import { AnimatedMenuButton } from "./AnimatedMenuButton";
 
 const navItems = [
   ["Home", "/"],
@@ -11,38 +12,6 @@ const navItems = [
   ["News", "/news"],
   ["Contact", "/contact"],
 ];
-
-function MenuButton({
-  isOpen,
-  onClick,
-}: {
-  isOpen: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      className="menu-button"
-      data-open={isOpen}
-      aria-label={isOpen ? "メニューを閉じる" : "メニューを開く"}
-      aria-expanded={isOpen}
-      onClick={onClick}
-    >
-      <span className="menu-state menu-closed-state" aria-hidden="true">
-        <span className="menu-label">menu</span>
-        <svg className="menu-vector" viewBox="0 0 26 18">
-          <path pathLength="1" d="M1 1H22.25C23.7688 1 25 2.23122 25 3.75C25 5.26878 23.7688 6.5 22.25 6.5H3.5C2.11929 6.5 1 7.61929 1 9C1 10.3807 2.11929 11.5 3.5 11.5H22.25C23.7688 11.5 25 12.7312 25 14.25C25 15.7688 23.7688 17 22.25 17H1" />
-        </svg>
-      </span>
-      <span className="menu-state menu-open-state" aria-hidden="true">
-        <span className="menu-label">Close</span>
-        <svg className="close-vector" viewBox="0 0 16 18">
-          <path pathLength="1" d="M0 1C4.42 1 8 4.51 8 8.85C8 13.19 4.42 16.7 0 16.7" />
-          <path pathLength="1" d="M16 1C11.58 1 8 4.51 8 8.85C8 13.19 11.58 16.7 16 16.7" />
-        </svg>
-      </span>
-    </button>
-  );
-}
 
 export function InteriorHeader({ current }: { current: string }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -82,7 +51,7 @@ export function InteriorHeader({ current }: { current: string }) {
           ))}
         </nav>
       </div>
-      <MenuButton isOpen={isOpen} onClick={() => setIsOpen((value) => !value)} />
+      <AnimatedMenuButton isOpen={isOpen} onToggle={() => setIsOpen((value) => !value)} />
       <div className="menu-overlay" data-open={isOpen} aria-hidden={!isOpen}>
         <nav aria-label="メインナビゲーション">
           {navItems.map(([label, href]) => (

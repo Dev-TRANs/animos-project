@@ -183,9 +183,8 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   stroke: white;
   stroke-width: 1.6;
   stroke-dasharray: 1;
-  stroke-dashoffset: 0;
-  transition: stroke-dashoffset 420ms cubic-bezier(.76,0,.24,1);
-  transition-delay: 90ms;
+  stroke-dashoffset: -1;
+  transition: stroke-dashoffset 520ms cubic-bezier(.76,0,.24,1);
 }
 .close-vector {
   width: 20px;
@@ -199,41 +198,50 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   stroke-linecap: round;
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
-  transition: stroke-dashoffset 360ms cubic-bezier(.76,0,.24,1);
+  transition: stroke-dashoffset 420ms cubic-bezier(.76,0,.24,1);
 }
 .close-vector path:nth-child(2) {
-  transition-delay: 30ms;
+  transition-delay: 45ms;
 }
 .menu-closed-state,
 .menu-open-state {
-  opacity: 1;
+  opacity: 0;
+  pointer-events: none;
   transform: none;
 }
-.menu-closed-state .menu-label {
+.menu-button[data-phase="closed"] .menu-closed-state,
+.menu-button[data-phase="hiding-menu"] .menu-closed-state,
+.menu-button[data-phase="showing-menu"] .menu-closed-state,
+.menu-button[data-phase="open"] .menu-open-state,
+.menu-button[data-phase="hiding-close"] .menu-open-state,
+.menu-button[data-phase="showing-close"] .menu-open-state {
   opacity: 1;
 }
-.menu-open-state .menu-label {
-  opacity: 0;
-  transform: translate(-50%, -35%) rotate(180deg);
-}
-.menu-button[data-open="true"] .menu-closed-state .menu-label {
-  opacity: 0;
-  transform: translate(-50%, -65%) rotate(180deg);
-}
-.menu-button[data-open="true"] .menu-open-state .menu-label {
-  opacity: 1;
-  transform: translate(-50%, -50%) rotate(180deg);
-}
-.menu-button[data-open="true"] .menu-vector path {
-  stroke-dashoffset: -1;
-  transition-delay: 0ms;
-}
-.menu-button[data-open="true"] .close-vector path {
+.menu-button[data-phase="closed"] .menu-vector path,
+.menu-button[data-phase="showing-menu"] .menu-vector path {
   stroke-dashoffset: 0;
-  transition-delay: 120ms;
 }
-.menu-button[data-open="true"] .close-vector path:nth-child(2) {
-  transition-delay: 160ms;
+.menu-button[data-phase="hiding-menu"] .menu-vector path {
+  stroke-dashoffset: -1;
+}
+.menu-button[data-phase="open"] .close-vector path,
+.menu-button[data-phase="showing-close"] .close-vector path {
+  stroke-dashoffset: 0;
+}
+.menu-button[data-phase="hiding-close"] .close-vector path {
+  stroke-dashoffset: -1;
+}
+.menu-button[data-phase="hiding-menu"] .menu-closed-state .menu-label,
+.menu-button[data-phase="hiding-close"] .menu-open-state .menu-label {
+  opacity: 0;
+}
+.menu-button[data-phase="showing-menu"] .menu-closed-state .menu-label,
+.menu-button[data-phase="showing-close"] .menu-open-state .menu-label {
+  animation: menu-label-in .28s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes menu-label-in {
+  from { opacity: 0; transform: translate(-50%, -35%) rotate(180deg); }
+  to { opacity: 1; transform: translate(-50%, -50%) rotate(180deg); }
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -358,7 +366,7 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
     drop-shadow(-2px 0 0 var(--black))
     drop-shadow(0 2px 0 var(--black))
     drop-shadow(0 -2px 0 var(--black))
-    drop-shadow(12px 12px 0 var(--black));
+    drop-shadow(7px 7px 0 var(--black));
 }
 .hero-title-surface {
   width: fit-content;
@@ -490,8 +498,8 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   place-items: center;
   transform: none;
   transform-origin: center;
-  transition: opacity .2s ease;
-  will-change: transform, opacity;
+  transition: filter .2s ease;
+  will-change: opacity;
 }
 .about-circle-link {
   display: block;
@@ -1492,22 +1500,32 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   justify-items: center;
   overflow: hidden;
   padding: 70px var(--page-pad) 42px;
-  border-radius: 50% 50% 0 0 / 28% 28% 0 0;
-  background: var(--blue);
   color: white;
   text-align: center;
+}
+.interior-footer::before {
+  position: absolute;
+  left: 50%;
+  bottom: min(-20vw, -150px);
+  width: 118vw;
+  aspect-ratio: 2 / 1;
+  border-radius: 50% 50% 0 0;
+  background: var(--blue);
+  content: "";
   opacity: .25;
-  transform: translateY(110px) scale(.84);
-  transform-origin: 50% 100%;
+  transform: translateX(-50%) translateY(110px) scale(.84);
+  transform-origin: 50% 82%;
   transition:
     opacity .8s ease,
     transform 1.05s cubic-bezier(.22,1,.36,1);
 }
-.interior-footer.is-visible {
+.interior-footer.is-visible::before {
   opacity: 1;
-  transform: translateY(0) scale(1);
+  transform: translateX(-50%) translateY(0) scale(1);
 }
 .interior-footer-content {
+  position: relative;
+  z-index: 1;
   display: grid;
   justify-items: center;
   opacity: 0;
@@ -1637,7 +1655,16 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   background: var(--gray);
   grid-template-columns: 150px 1fr 80px;
   gap: clamp(20px, 4vw, 54px);
-  transition: background .2s ease, transform .25s ease;
+  opacity: 0;
+  transform: translateY(58px);
+  transition:
+    background .2s ease,
+    opacity .55s ease var(--news-delay, 0ms),
+    transform .72s cubic-bezier(.22,1,.36,1) var(--news-delay, 0ms);
+}
+.news-index-card.is-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 .news-index-card.has-note-thumbnail {
   grid-template-columns: 150px 130px 1fr 70px;
@@ -1648,7 +1675,7 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   border-radius: 20px;
   object-fit: cover;
 }
-.news-index-card:hover {
+.news-index-card.is-visible:hover {
   background: #d5d5d5;
   transform: translateY(-4px);
 }
@@ -1978,7 +2005,12 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   .about-collaboration h2 { font-size: 28px; }
   .interior-next span { padding: 14px 18px; border-radius: 20px 0 0 20px; }
   .interior-next b { border-radius: 0 20px 20px 0; font-size: 29px; }
-  .interior-footer { min-height: 310px; border-radius: 50% 50% 0 0 / 18% 18% 0 0; }
+  .interior-footer { min-height: 310px; }
+  .interior-footer::before {
+    bottom: -75px;
+    width: 155vw;
+    aspect-ratio: 1.8 / 1;
+  }
   .interior-footer-brand { font-size: 32px; }
   .interior-footer nav { gap: 14px; font-size: 12px; }
   .action-detail-list { gap: 86px; padding-block: 84px 100px; }

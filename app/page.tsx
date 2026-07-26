@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { withBasePath } from "./base-path";
 import { siteLinks } from "./site-config";
+import { AnimatedMenuButton } from "./components/AnimatedMenuButton";
 
 const actions = [
   {
@@ -94,41 +95,6 @@ function CTA({ href, children }: { href: string; children: React.ReactNode }) {
   );
 }
 
-function MenuButton({
-  isOpen,
-  onClick,
-}: {
-  isOpen: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      className="menu-button"
-      data-open={isOpen}
-      aria-label={isOpen ? "メニューを閉じる" : "メニューを開く"}
-      aria-expanded={isOpen}
-      onClick={onClick}
-    >
-      <span className="menu-state menu-closed-state" aria-hidden="true">
-        <span className="menu-label">menu</span>
-        <svg className="menu-vector" viewBox="0 0 26 18">
-          <path
-            pathLength="1"
-            d="M1 1H22.25C23.7688 1 25 2.23122 25 3.75C25 5.26878 23.7688 6.5 22.25 6.5H3.5C2.11929 6.5 1 7.61929 1 9C1 10.3807 2.11929 11.5 3.5 11.5H22.25C23.7688 11.5 25 12.7312 25 14.25C25 15.7688 23.7688 17 22.25 17H1"
-          />
-        </svg>
-      </span>
-      <span className="menu-state menu-open-state" aria-hidden="true">
-        <span className="menu-label">Close</span>
-        <svg className="close-vector" viewBox="0 0 16 18">
-          <path pathLength="1" d="M0 1C4.42 1 8 4.51 8 8.85C8 13.19 4.42 16.7 0 16.7" />
-          <path pathLength="1" d="M16 1C11.58 1 8 4.51 8 8.85C8 13.19 11.58 16.7 16 16.7" />
-        </svg>
-      </span>
-    </button>
-  );
-}
-
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
@@ -165,7 +131,7 @@ function Header() {
           ))}
         </nav>
       </div>
-      <MenuButton isOpen={isOpen} onClick={() => setIsOpen((value) => !value)} />
+      <AnimatedMenuButton isOpen={isOpen} onToggle={() => setIsOpen((value) => !value)} />
       <div className="menu-overlay" data-open={isOpen} aria-hidden={!isOpen}>
         <nav aria-label="メインナビゲーション">
           {navItems.map(([label, href]) => (
@@ -193,7 +159,6 @@ function Hero({
     targetX: number;
     targetY: number;
     size: number;
-    sourceFade: number;
   } | null>(null);
   const morphIndex = 16;
   const scrollIndex = 53;
@@ -225,12 +190,6 @@ function Hero({
 
       const targetRect = target.getBoundingClientRect();
       const sourceDocumentY = sourceRect.top + window.scrollY;
-      const sourceCenterY = sourceDocumentY + size / 2;
-      const fadeEnd = hero.offsetHeight * 0.25;
-      const sourceFade = Math.min(
-        1,
-        Math.max(0.08, 0.08 + (sourceCenterY / fadeEnd) * 0.92),
-      );
 
       morphLayoutRef.current = {
         sourceX: sourceRect.left + window.scrollX,
@@ -238,7 +197,6 @@ function Hero({
         targetX: targetRect.left + window.scrollX + targetRect.width / 2 - size / 2,
         targetY: targetRect.top + window.scrollY + targetRect.height / 2 - size / 2,
         size,
-        sourceFade,
       };
     };
 
@@ -277,12 +235,10 @@ function Hero({
         const y = layout.sourceY + (layout.targetY - layout.sourceY) * eased - window.scrollY;
         morph.style.transform = `translate3d(${x}px, ${y}px, 0)`;
         morph.style.setProperty("--gradient-progress", String(eased));
-        const crossfade = Math.min(1, Math.max(0, (progress - 0.74) / 0.08));
-        const blendedFade = layout.sourceFade + (1 - layout.sourceFade) * eased;
-        morph.style.opacity = String(blendedFade * (1 - crossfade));
-        target.style.opacity = String(crossfade);
-        const targetGrowth = window.innerWidth < 768 ? 0.32 : 0.08;
-        target.style.transform = `scale(${1 + crossfade * targetGrowth})`;
+        const hasArrived = move >= 0.995;
+        morph.style.opacity = hasArrived ? "0" : "1";
+        target.style.opacity = hasArrived ? "1" : "0";
+        target.style.transform = "scale(1)";
       }
     };
 
@@ -658,12 +614,12 @@ export default function Home() {
       <section className="poster-contact section-shell" id="contact">
         <h2><Link href="/contact">Contact</Link></h2>
         <p>アニモスの活動にご興味がある方は、<br />気軽にご連絡ください！</p>
-        <CTA href="#">ANIMOS PROJECT に連絡する</CTA>
+        <CTA href="/contact">ANIMOS PROJECT に連絡する</CTA>
       </section>
 
       <footer className="poster-footer">
         <div className="footer-orb">
-          <Link className="footer-home" href="/">ANIMOS PROJECT</Link>
+          <a className="footer-home" href="#home">ANIMOS PROJECT</a>
           <nav aria-label="フッターナビゲーション">
             <Link href="/about">About</Link>
             <Link href="/actions">Actions</Link>
