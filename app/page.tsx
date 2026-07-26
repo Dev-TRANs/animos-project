@@ -559,7 +559,7 @@ export default function Home() {
   useEffect(() => {
     let active = true;
 
-    fetch(withBasePath("/api/note/"))
+    fetch(withBasePath("/api/note"))
       .then((response) => {
         if (!response.ok) throw new Error("note feed unavailable");
         return response.json();
