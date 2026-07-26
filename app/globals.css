@@ -166,9 +166,6 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   line-height: 1;
   writing-mode: vertical-rl;
   transform: translate(-50%, -50%) rotate(180deg);
-  transition:
-    opacity .18s ease,
-    transform .28s cubic-bezier(.22,1,.36,1);
 }
 .menu-vector,
 .close-vector {
@@ -183,8 +180,7 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   stroke: white;
   stroke-width: 1.6;
   stroke-dasharray: 1;
-  stroke-dashoffset: -1;
-  transition: stroke-dashoffset 520ms cubic-bezier(.76,0,.24,1);
+  stroke-dashoffset: 0;
 }
 .close-vector {
   width: 20px;
@@ -197,11 +193,7 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   stroke-width: 1.65;
   stroke-linecap: round;
   stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  transition: stroke-dashoffset 420ms cubic-bezier(.76,0,.24,1);
-}
-.close-vector path:nth-child(2) {
-  transition-delay: 45ms;
+  stroke-dashoffset: 0;
 }
 .menu-closed-state,
 .menu-open-state {
@@ -217,31 +209,55 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
 .menu-button[data-phase="showing-close"] .menu-open-state {
   opacity: 1;
 }
-.menu-button[data-phase="closed"] .menu-vector path,
-.menu-button[data-phase="showing-menu"] .menu-vector path {
-  stroke-dashoffset: 0;
-}
 .menu-button[data-phase="hiding-menu"] .menu-vector path {
-  stroke-dashoffset: -1;
+  animation: menu-path-hide 460ms cubic-bezier(.76,0,.24,1) both;
 }
-.menu-button[data-phase="open"] .close-vector path,
 .menu-button[data-phase="showing-close"] .close-vector path {
-  stroke-dashoffset: 0;
+  animation: close-path-show 360ms cubic-bezier(.76,0,.24,1) both;
+}
+.menu-button[data-phase="showing-close"] .close-vector path:nth-child(2) {
+  animation-delay: 50ms;
 }
 .menu-button[data-phase="hiding-close"] .close-vector path {
-  stroke-dashoffset: -1;
+  animation: close-path-hide 360ms cubic-bezier(.76,0,.24,1) both;
+}
+.menu-button[data-phase="hiding-close"] .close-vector path:nth-child(2) {
+  animation-delay: 35ms;
+}
+.menu-button[data-phase="showing-menu"] .menu-vector path {
+  animation: menu-path-show 460ms cubic-bezier(.76,0,.24,1) both;
 }
 .menu-button[data-phase="hiding-menu"] .menu-closed-state .menu-label,
 .menu-button[data-phase="hiding-close"] .menu-open-state .menu-label {
-  opacity: 0;
+  animation: menu-label-out 150ms ease both;
 }
 .menu-button[data-phase="showing-menu"] .menu-closed-state .menu-label,
 .menu-button[data-phase="showing-close"] .menu-open-state .menu-label {
-  animation: menu-label-in .28s cubic-bezier(.22,1,.36,1) both;
+  animation: menu-label-in 180ms ease both;
+}
+@keyframes menu-path-hide {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: -1; }
+}
+@keyframes menu-path-show {
+  from { stroke-dashoffset: -1; }
+  to { stroke-dashoffset: 0; }
+}
+@keyframes close-path-show {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+@keyframes close-path-hide {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: -1; }
+}
+@keyframes menu-label-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
 }
 @keyframes menu-label-in {
-  from { opacity: 0; transform: translate(-50%, -35%) rotate(180deg); }
-  to { opacity: 1; transform: translate(-50%, -50%) rotate(180deg); }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @media (hover: hover) and (pointer: fine) {

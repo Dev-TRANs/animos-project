@@ -56,8 +56,8 @@ export function AnimatedMenuButton({
           setPhase("open");
           busyRef.current = false;
           setIsBusy(false);
-        }, 470);
-      }, 540);
+        }, 430);
+      }, 460);
       return;
     }
 
@@ -69,8 +69,8 @@ export function AnimatedMenuButton({
         busyRef.current = false;
         setIsBusy(false);
         onToggle();
-      }, 540);
-    }, 470);
+      }, 470);
+    }, 410);
   };
 
   return (
