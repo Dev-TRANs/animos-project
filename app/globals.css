@@ -237,10 +237,10 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
 }
 @keyframes menu-path-hide {
   from { stroke-dashoffset: 0; }
-  to { stroke-dashoffset: -1; }
+  to { stroke-dashoffset: 1; }
 }
 @keyframes menu-path-show {
-  from { stroke-dashoffset: -1; }
+  from { stroke-dashoffset: 1; }
   to { stroke-dashoffset: 0; }
 }
 @keyframes close-path-show {
@@ -249,7 +249,7 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
 }
 @keyframes close-path-hide {
   from { stroke-dashoffset: 0; }
-  to { stroke-dashoffset: -1; }
+  to { stroke-dashoffset: 1; }
 }
 @keyframes menu-label-out {
   from { opacity: 1; }
