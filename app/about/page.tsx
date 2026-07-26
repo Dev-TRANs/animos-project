@@ -41,7 +41,7 @@ export default function AboutPage() {
       <InteriorHeader current="About Us" />
       <InteriorHero
         eyebrow="ABOUT US"
-        title={<>誰一人<br />取り残されない社会へ。</>}
+        title={<><span className="interior-title-line">誰一人</span><span className="interior-title-line">取り残されない社会へ。</span></>}
         lead="私たちは、防災・情報・地域のつながりを組み合わせ、すべての人が日常から安心して暮らせる地域をつくるプロジェクトです。"
       />
       <section className="interior-intro">

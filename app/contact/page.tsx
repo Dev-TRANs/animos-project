@@ -38,7 +38,7 @@ export default function ContactPage() {
       <InteriorHeader current="Contact" />
       <InteriorHero
         eyebrow="CONTACT"
-        title={<>一緒に、地域のこれからを<br />考えませんか。</>}
+        title={<><span className="interior-title-line">一緒に、地域のこれからを</span><span className="interior-title-line">考えませんか。</span></>}
         lead="アニモスの活動に興味を持ってくださった方、地域防災について話してみたい方からのご連絡をお待ちしています。"
       />
       <section className="contact-topics">

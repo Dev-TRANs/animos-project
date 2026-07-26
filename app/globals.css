@@ -1278,7 +1278,7 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
 .interior-hero-copy {
   position: relative;
   z-index: 2;
-  width: min(1280px, 100%);
+  width: min(1440px, 100%);
 }
 .interior-eyebrow,
 .kicker {
@@ -1290,16 +1290,20 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   line-height: 1;
 }
 .interior-hero h1 {
-  max-width: 19ch;
+  max-width: 100%;
   margin: 0;
-  font-size: clamp(46px, 5.8vw, 84px);
+  font-size: clamp(44px, 5.2vw, 76px);
   font-weight: 700;
   letter-spacing: .005em;
   line-height: 1.12;
   text-wrap: balance;
 }
+.interior-title-line {
+  display: block;
+  white-space: nowrap;
+}
 .interior-lead {
-  max-width: 710px;
+  max-width: 820px;
   margin: 32px 0 0;
   font-size: clamp(16px, 1.6vw, 21px);
   font-weight: 700;
@@ -1976,10 +1980,17 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   }
   .interior-hero {
     min-height: 660px;
+    padding-right: 14px;
+    padding-left: 14px;
     padding-top: 130px;
     padding-bottom: 54px;
   }
-  .interior-hero h1 { max-width: 14ch; font-size: clamp(39px, 11.5vw, 52px); }
+  .interior-hero h1 {
+    max-width: 100%;
+    font-size: clamp(24px, 7.3vw, 34px);
+    letter-spacing: -.01em;
+    line-height: 1.2;
+  }
   .interior-lead { margin-top: 24px; font-size: 15px; line-height: 1.75; }
   .interior-intro { padding-block: 78px; }
   .interior-intro h2, .contact-topics > h2 { font-size: 30px; }
