@@ -3,11 +3,18 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { createPortal } from "react-dom";
 
+const defaultAnimosMixEndpoint =
+  "https://script.google.com/macros/s/AKfycbyL9KmHtJp-cH1YNTQC-xioFKwX2d1A2XTWhaR1p9x2rVcpQc275ARL5aCMxlqGBLwtSw/exec";
+
 export function EditableThemeWord() {
   const [word, setWord] = useState("〇〇");
   const [draft, setDraft] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [submitState, setSubmitState] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [submitMessage, setSubmitMessage] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+  const endpoint =
+    process.env.NEXT_PUBLIC_ANIMOS_MIX_ENDPOINT?.trim() || defaultAnimosMixEndpoint;
 
   useEffect(() => {
     const syncWord = (event: Event) => {
@@ -35,16 +42,47 @@ export function EditableThemeWord() {
 
   const openEditor = () => {
     setDraft(word === "〇〇" ? "" : word);
+    setSubmitState("idle");
+    setSubmitMessage("");
     setIsOpen(true);
   };
 
-  const applyWord = (event: FormEvent<HTMLFormElement>) => {
+  const applyWord = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const normalizedWord = draft.trim().slice(0, 16);
-    if (!normalizedWord) return;
-    setWord(normalizedWord);
-    window.dispatchEvent(new CustomEvent("animos-theme-word", { detail: normalizedWord }));
-    setIsOpen(false);
+    const form = event.currentTarget;
+    const honeypot = new FormData(form).get("website");
+    if (!normalizedWord || honeypot || submitState === "submitting") return;
+
+    if (!endpoint) {
+      setSubmitState("error");
+      setSubmitMessage("送信先の設定がまだ完了していません。");
+      return;
+    }
+
+    setSubmitState("submitting");
+    setSubmitMessage("スプレッドシートへ届けています…");
+
+    try {
+      await fetch(endpoint, {
+        method: "POST",
+        mode: "no-cors",
+        keepalive: true,
+        body: new URLSearchParams({
+          idea: normalizedWord,
+          source: window.location.href,
+          website: "",
+        }),
+      });
+      setWord(normalizedWord);
+      window.dispatchEvent(new CustomEvent("animos-theme-word", { detail: normalizedWord }));
+      setSubmitState("success");
+      setSubmitMessage("アイデアを届けました。ありがとう！");
+      window.setTimeout(() => setIsOpen(false), 700);
+    } catch {
+      setSubmitState("error");
+      setSubmitMessage("送信できませんでした。通信環境を確認して、もう一度お試しください。");
+    }
   };
 
   return (
@@ -79,15 +117,30 @@ export function EditableThemeWord() {
               <input
                 ref={inputRef}
                 value={draft}
-                onChange={(event) => setDraft(event.target.value)}
+                onChange={(event) => {
+                  setDraft(event.target.value);
+                  if (submitState !== "idle") {
+                    setSubmitState("idle");
+                    setSubmitMessage("");
+                  }
+                }}
                 maxLength={16}
                 placeholder="例：地域、福祉、教育"
                 required
               />
             </label>
+            <input className="theme-editor-trap" type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
+            {submitMessage && (
+              <p className={`theme-editor-status is-${submitState}`} role="status" aria-live="polite">
+                {submitMessage}
+              </p>
+            )}
             <div className="theme-editor-actions">
               <button type="button" onClick={() => setIsOpen(false)}>キャンセル</button>
-              <button type="submit">組み合わせる <span>→</span></button>
+              <button type="submit" disabled={submitState === "submitting" || submitState === "success"}>
+                {submitState === "submitting" ? "送信中…" : submitState === "success" ? "届きました" : "組み合わせる"}
+                <span>→</span>
+              </button>
             </div>
           </form>
         </div>,

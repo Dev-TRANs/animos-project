@@ -665,6 +665,22 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   color: rgba(5,5,5,.38);
   font-weight: 500;
 }
+.theme-editor-trap {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+.theme-editor-status {
+  margin: 12px 2px 0;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+.theme-editor-status.is-success { color: var(--blue); }
+.theme-editor-status.is-error { color: #c83a13; }
 .theme-editor-actions {
   display: grid;
   gap: 10px;
@@ -688,6 +704,11 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   border-color: var(--blue);
   background: var(--blue);
   color: white;
+}
+.theme-editor-actions button:disabled {
+  cursor: wait;
+  opacity: .65;
+  transform: none;
 }
 .theme-editor-actions button span {
   font-family: var(--en);
@@ -713,12 +734,12 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
     color: white;
     transform: translateY(-2px);
   }
-  .theme-editor-actions button[type="submit"]:hover {
+  .theme-editor-actions button[type="submit"]:not(:disabled):hover {
     border-color: #0800c7;
     background: #0800c7;
     transform: translateY(-2px);
   }
-  .theme-editor-actions button[type="submit"]:hover span {
+  .theme-editor-actions button[type="submit"]:not(:disabled):hover span {
     transform: translateX(4px);
   }
 }
