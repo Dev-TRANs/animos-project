@@ -1,7 +1,7 @@
 const configuredNoteUrl =
   process.env.NOTE_ACCOUNT_URL ??
   process.env.NEXT_PUBLIC_NOTE_ACCOUNT_URL ??
-  "https://note.com/metsa_a";
+  "https://note.com/lithe_daisy9215";
 
 export const dynamic = "force-static";
 

@@ -11,35 +11,13 @@ export function ScrollBoundaryGuard() {
       target instanceof Element && Boolean(target.closest(".theme-editor-backdrop"))
     );
 
-    const getElementBottom = (element: HTMLElement) => {
-      let bottom = element.offsetHeight;
-      let current: HTMLElement | null = element;
-      while (current) {
-        bottom += current.offsetTop;
-        current = current.offsetParent as HTMLElement | null;
-      }
-      return bottom;
-    };
-
     const getMaxScroll = () => {
       const footer = document.querySelector<HTMLElement>("main > footer:last-child");
       const scrollingElement = document.scrollingElement ?? document.documentElement;
       const contentBottom = footer
-        ? getElementBottom(footer)
+        ? footer.getBoundingClientRect().bottom + scrollingElement.scrollTop
         : scrollingElement.scrollHeight;
-      const viewport = window.visualViewport;
-      const viewportBottom = viewport
-        ? viewport.height + viewport.offsetTop
-        : window.innerHeight;
-      return Math.max(0, contentBottom - viewportBottom);
-    };
-
-    const getBoundary = () => {
-      const maxScroll = getMaxScroll();
-      return {
-        atTop: window.scrollY <= 0,
-        atBottom: window.scrollY >= maxScroll - 1,
-      };
+      return Math.max(0, contentBottom - window.innerHeight);
     };
 
     const clampToPage = () => {
@@ -65,14 +43,22 @@ export function ScrollBoundaryGuard() {
       const currentTouchY = event.touches[0].clientY;
       const movement = currentTouchY - previousTouchY;
       previousTouchY = currentTouchY;
-      const { atTop, atBottom } = getBoundary();
-      if ((atTop && movement > 0) || (atBottom && movement < 0)) event.preventDefault();
+      const maxScroll = getMaxScroll();
+      const projectedScroll = window.scrollY - movement;
+      if (projectedScroll < 0 || projectedScroll > maxScroll) {
+        if (event.cancelable) event.preventDefault();
+        window.scrollTo(0, Math.min(maxScroll, Math.max(0, projectedScroll)));
+      }
     };
 
     const handleWheel = (event: WheelEvent) => {
       if (isInsideScrollableOverlay(event.target)) return;
-      const { atTop, atBottom } = getBoundary();
-      if ((atTop && event.deltaY < 0) || (atBottom && event.deltaY > 0)) event.preventDefault();
+      const maxScroll = getMaxScroll();
+      const projectedScroll = window.scrollY + event.deltaY;
+      if (projectedScroll < 0 || projectedScroll > maxScroll) {
+        if (event.cancelable) event.preventDefault();
+        window.scrollTo(0, Math.min(maxScroll, Math.max(0, projectedScroll)));
+      }
     };
 
     const delayedClamps = [0, 250, 1000].map((delay) => (
