@@ -189,11 +189,12 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
 }
 .close-vector path {
   fill: none;
+  opacity: 0;
   stroke: white;
   stroke-width: 1.65;
   stroke-linecap: round;
   stroke-dasharray: 1;
-  stroke-dashoffset: 0;
+  stroke-dashoffset: 1.08;
 }
 .menu-closed-state,
 .menu-open-state {
@@ -219,7 +220,13 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   animation-delay: 50ms;
 }
 .menu-button[data-phase="hiding-close"] .close-vector path {
+  opacity: 1;
+  stroke-dashoffset: 0;
   animation: close-path-hide 360ms cubic-bezier(.76,0,.24,1) both;
+}
+.menu-button[data-phase="open"] .close-vector path {
+  opacity: 1;
+  stroke-dashoffset: 0;
 }
 .menu-button[data-phase="hiding-close"] .close-vector path:nth-child(2) {
   animation-delay: 35ms;
@@ -244,12 +251,14 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   to { stroke-dashoffset: 0; }
 }
 @keyframes close-path-show {
-  from { stroke-dashoffset: 1; }
-  to { stroke-dashoffset: 0; }
+  0%, 4% { opacity: 0; stroke-dashoffset: 1.08; }
+  5% { opacity: 1; stroke-dashoffset: 1.08; }
+  100% { opacity: 1; stroke-dashoffset: 0; }
 }
 @keyframes close-path-hide {
-  from { stroke-dashoffset: 0; }
-  to { stroke-dashoffset: 1; }
+  from { opacity: 1; stroke-dashoffset: 0; }
+  96% { opacity: 1; }
+  to { opacity: 0; stroke-dashoffset: 1.08; }
 }
 @keyframes menu-label-out {
   from { opacity: 1; }
@@ -2287,6 +2296,22 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
     max-width: 260px;
     margin-inline: auto;
     line-height: 1.7;
+  }
+  .theme-editor-actions {
+    justify-content: center;
+    grid-template-columns: auto auto;
+  }
+  .theme-editor-actions button {
+    min-width: 94px;
+    min-height: 46px;
+    padding: 7px 15px;
+    font-size: 12px;
+  }
+  .theme-editor-actions button[type="submit"] {
+    min-width: 142px;
+  }
+  .theme-editor-actions button span {
+    font-size: 19px;
   }
   .interior-next span { padding: 14px 18px; border-radius: 20px 0 0 20px; }
   .interior-next b { border-radius: 0 20px 20px 0; font-size: 29px; }
