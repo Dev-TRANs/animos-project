@@ -12,10 +12,15 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+html {
+  overscroll-behavior-y: none;
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
 body {
   margin: 0;
   overflow-x: clip;
+  overscroll-behavior-y: none;
   background: #fff;
   color: var(--black);
   font-family: var(--jp);
@@ -1845,8 +1850,13 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   color: transparent;
   -webkit-background-clip: text;
 }
-.interior-footer small {
+.interior-footer-meta {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
   margin-top: 28px;
+}
+.interior-footer-meta small {
   font-size: 10px;
   letter-spacing: .1em;
 }
