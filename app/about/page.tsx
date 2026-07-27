@@ -1,13 +1,14 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { withBasePath } from "../base-path";
 import { EditableThemeWord } from "../components/EditableThemeWord";
 import { InteriorFooter, InteriorHeader, InteriorHero } from "../components/InteriorPage";
+import { createPageMetadata } from "../metadata-config";
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
   title: "About Us",
-  description: "アニモスプロジェクトが目指す、誰も取り残さない地域防災についてご紹介します。",
-};
+  description: "ANIMOS PROJECTの使命、目指す未来、4つの価値観をご紹介。防災×情報×〇〇で、誰一人取り残されない地域社会を目指します。",
+  path: "/about",
+});
 
 const values = [
   {

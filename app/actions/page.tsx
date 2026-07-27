@@ -1,12 +1,13 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { withBasePath } from "../base-path";
 import { InteriorFooter, InteriorHeader, InteriorHero } from "../components/InteriorPage";
+import { createPageMetadata } from "../metadata-config";
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
   title: "Actions",
-  description: "アニモスプロジェクトが取り組む5つの地域防災アクションをご紹介します。",
-};
+  description: "デジタルハザードマップ、地域情報共有、要支援者へのデジタル支援など、ANIMOS PROJECTが進める5つの地域防災アクションをご紹介します。",
+  path: "/actions",
+});
 
 const actions = [
   ["01", "デジタルハザードマップ開発", "地域の危険箇所、避難所、避難ルートをマップ上に整理。住民が普段から確認し、更新できる仕組みを目指します。", "/assets/action-hazard-map.png", ["危険箇所の可視化", "避難ルートの共有", "地域参加型の更新"]],

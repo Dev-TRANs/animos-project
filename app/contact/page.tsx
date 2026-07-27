@@ -1,11 +1,12 @@
-import type { Metadata } from "next";
 import { InteriorFooter, InteriorHeader, InteriorHero } from "../components/InteriorPage";
+import { createPageMetadata } from "../metadata-config";
 import { siteLinks } from "../site-config";
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
   title: "Contact",
-  description: "アニモスプロジェクトへのご相談・協働に関するお問い合わせ案内です。",
-};
+  description: "ANIMOS PROJECTへのご相談、取材、活動参加、協働について。メールまたはInstagramからお問い合わせいただけます。",
+  path: "/contact",
+});
 
 const topics = [
   ["地域・自治体のみなさま", "地域防災の課題や、デジタル活用について一緒に考えたい"],

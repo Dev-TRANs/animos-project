@@ -1,43 +1,39 @@
 import type { Metadata } from "next";
 import { withBasePath } from "./base-path";
+import { siteUrl, socialImage } from "./metadata-config";
 import "./globals.css";
 
-const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  "https://animos-project.montblancabc.chatgpt.site";
-const siteOrigin = new URL(siteUrl).origin;
+const homeDescription =
+  "防災×情報×〇〇で、誰一人取り残されない社会へ。地域・自治体・企業・学校と連携し、日常から安心して暮らせる地域をつくるANIMOS PROJECT。";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteOrigin),
+  metadataBase: new URL(`${siteUrl}/`),
   title: {
     default: "アニモスプロジェクト",
     template: "%s｜アニモスプロジェクト",
   },
-  description:
-    "誰も取り残さない地域防災を。デジタルの力で地域の防災・福祉・情報をつなぐアニモスプロジェクト。",
+  description: homeDescription,
+  alternates: {
+    canonical: `${siteUrl}/`,
+  },
   icons: {
     icon: withBasePath("/animos-logo.png"),
     shortcut: withBasePath("/animos-logo.png"),
   },
   openGraph: {
-    title: "誰も取り残さない地域防災を。",
-    description: "デジタルの力で地域の防災・福祉・情報をつなぐ。",
+    title: "誰一人取り残されない社会へ。｜ANIMOS PROJECT",
+    description: homeDescription,
+    url: `${siteUrl}/`,
+    siteName: "ANIMOS PROJECT",
     type: "website",
     locale: "ja_JP",
-    images: [
-      {
-        url: withBasePath("/og.png"),
-        width: 2594,
-        height: 1274,
-        alt: "いつものつながりが、もしもの命を支える。 ANIMOS PROJECT",
-      },
-    ],
+    images: [socialImage],
   },
   twitter: {
     card: "summary_large_image",
-    title: "誰も取り残さない地域防災を。",
-    description: "デジタルの力で地域の防災・福祉・情報をつなぐ。",
-    images: [withBasePath("/og.png")],
+    title: "誰一人取り残されない社会へ。｜ANIMOS PROJECT",
+    description: homeDescription,
+    images: [socialImage.url],
   },
 };
 
