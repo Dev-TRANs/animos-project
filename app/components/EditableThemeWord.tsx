@@ -56,12 +56,12 @@ export function EditableThemeWord() {
 
     if (!endpoint) {
       setSubmitState("error");
-      setSubmitMessage("送信先の設定がまだ完了していません。");
+      setSubmitMessage("送信できませんでした。");
       return;
     }
 
     setSubmitState("submitting");
-    setSubmitMessage("スプレッドシートへ届けています…");
+    setSubmitMessage("送信中…");
 
     try {
       await fetch(endpoint, {
@@ -77,7 +77,7 @@ export function EditableThemeWord() {
       setWord(normalizedWord);
       window.dispatchEvent(new CustomEvent("animos-theme-word", { detail: normalizedWord }));
       setSubmitState("success");
-      setSubmitMessage("アイデアを届けました。ありがとう！");
+      setSubmitMessage("届いたよ！");
       window.setTimeout(() => setIsOpen(false), 700);
     } catch {
       setSubmitState("error");
@@ -138,7 +138,7 @@ export function EditableThemeWord() {
             <div className="theme-editor-actions">
               <button type="button" onClick={() => setIsOpen(false)}>キャンセル</button>
               <button type="submit" disabled={submitState === "submitting" || submitState === "success"}>
-                {submitState === "submitting" ? "送信中…" : submitState === "success" ? "届きました" : "組み合わせる"}
+                {submitState === "submitting" ? "送信中…" : submitState === "success" ? "届いたよ" : "組み合わせる"}
                 <span>→</span>
               </button>
             </div>

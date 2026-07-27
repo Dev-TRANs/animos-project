@@ -1911,6 +1911,21 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   border-radius: 24px;
   object-fit: cover;
 }
+.action-detail-image.is-app-screen img {
+  aspect-ratio: 1170 / 1669;
+  object-fit: cover;
+  object-position: top;
+}
+.action-detail-image.is-app-screen small {
+  display: block;
+  padding: 13px 8px 2px;
+  color: white;
+  font-family: var(--en);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-align: center;
+}
 .action-detail-image span {
   position: absolute;
   left: -18px;
