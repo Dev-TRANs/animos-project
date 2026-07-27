@@ -27,8 +27,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: withBasePath("/og.png"),
-        width: 1792,
-        height: 896,
+        width: 2594,
+        height: 1274,
         alt: "いつものつながりが、もしもの命を支える。 ANIMOS PROJECT",
       },
     ],
