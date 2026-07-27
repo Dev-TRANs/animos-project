@@ -78,7 +78,7 @@ export function InteriorHero({
 }: {
   eyebrow: string;
   title: React.ReactNode;
-  lead: string;
+  lead: React.ReactNode;
 }) {
   return (
     <section className="interior-hero">
@@ -91,13 +91,42 @@ export function InteriorHero({
   );
 }
 
-export function InteriorFooter() {
+export function InteriorFooter({ homeHref }: { homeHref?: string } = {}) {
   const footerRef = useRef<HTMLElement>(null);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const footer = footerRef.current;
     if (!footer) return;
+
+    if (homeHref) {
+      let ticking = false;
+      const render = () => {
+        ticking = false;
+        const rect = footer.getBoundingClientRect();
+        const progress = Math.min(
+          1,
+          Math.max(0, (window.innerHeight - rect.top) / (rect.height * .9)),
+        );
+        footer.style.setProperty("--footer-scale", String(.58 + progress * .42));
+        footer.style.setProperty("--footer-offset", `${(1 - progress) * 92}px`);
+        footer.style.setProperty("--footer-opacity", String(.28 + progress * .72));
+        footer.style.setProperty("--footer-copy-opacity", String(Math.max(0, (progress - .28) / .72)));
+        footer.style.setProperty("--footer-copy-offset", `${(1 - progress) * 28}px`);
+      };
+      const requestRender = () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(render);
+      };
+      render();
+      window.addEventListener("scroll", requestRender, { passive: true });
+      window.addEventListener("resize", requestRender);
+      return () => {
+        window.removeEventListener("scroll", requestRender);
+        window.removeEventListener("resize", requestRender);
+      };
+    }
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -109,12 +138,16 @@ export function InteriorFooter() {
     );
     observer.observe(footer);
     return () => observer.disconnect();
-  }, []);
+  }, [homeHref]);
 
   return (
-    <footer className={`interior-footer${isVisible ? " is-visible" : ""}`} ref={footerRef}>
+    <footer className={`interior-footer${isVisible ? " is-visible" : ""}${homeHref ? " is-scroll-animated" : ""}`} ref={footerRef}>
       <div className="interior-footer-content">
-        <Link className="interior-footer-brand" href="/">ANIMOS PROJECT</Link>
+        {homeHref ? (
+          <a className="interior-footer-brand" href={homeHref}>ANIMOS PROJECT</a>
+        ) : (
+          <Link className="interior-footer-brand" href="/">ANIMOS PROJECT</Link>
+        )}
         <nav aria-label="フッターナビゲーション">
           {navItems.slice(1).map(([label, href]) => <Link key={href} href={href}>{label}</Link>)}
         </nav>

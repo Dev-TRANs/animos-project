@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { withBasePath } from "../base-path";
+import { EditableThemeWord } from "../components/EditableThemeWord";
 import { InteriorFooter, InteriorHeader, InteriorHero } from "../components/InteriorPage";
 
 export const metadata: Metadata = {
@@ -42,11 +43,11 @@ export default function AboutPage() {
       <InteriorHero
         eyebrow="ABOUT US"
         title={<><span className="interior-title-line">誰一人</span><span className="interior-title-line">取り残されない社会へ。</span></>}
-        lead="私たちは、防災・情報・地域のつながりを組み合わせ、すべての人が日常から安心して暮らせる地域をつくるプロジェクトです。"
+        lead={<>私たちは、「防災×情報×〇〇」を組み合わせ、すべての人が日常から安心して暮らせる地域をつくるプロジェクトです。</>}
       />
       <section className="interior-intro">
         <p className="kicker">WHO WE ARE</p>
-        <h2>防災×情報×地域のつながりで、日常から安心できるまちをつくる。</h2>
+        <h2>防災×情報×〇〇で、日常から安心できるまちをつくる。</h2>
         <p>災害が起きたときだけではなく、普段から必要な情報に触れ、困ったときに支援へつながれること。アニモスプロジェクトは、地域にある知恵と人のつながりにテクノロジーを掛け合わせ、誰も取り残されない仕組みを育てます。</p>
       </section>
 
@@ -96,6 +97,15 @@ export default function AboutPage() {
           <h2>立場を越えてつながり、安心して暮らせる社会を一緒につくる。</h2>
           <p>地域のみなさん、自治体、企業、学校、そして同じ目標を持つ団体と連携し、それぞれの知見や強みを生かしながら、誰もが安心して暮らせる社会づくりに貢献します。</p>
         </div>
+      </section>
+      <section className="about-idea">
+        <p className="kicker">YOUR IDEA</p>
+        <h2>君なら、何を<br />組み合わせる？</h2>
+        <p>「〇〇」に入る言葉は、きっと一つではありません。</p>
+        <div className="about-idea-formula">
+          <span>防災</span><b>×</b><span>情報</span><b>×</b><EditableThemeWord />
+        </div>
+        <p className="about-idea-hint">鼓動する「〇〇」をタップして、あなたのアイデアを聞かせてください。</p>
       </section>
       <Link className="interior-next" href="/actions"><span>取り組みを見る</span><b>→</b></Link>
       <InteriorFooter />

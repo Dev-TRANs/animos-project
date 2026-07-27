@@ -3,8 +3,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { withBasePath } from "./base-path";
-import { siteLinks } from "./site-config";
 import { AnimatedMenuButton } from "./components/AnimatedMenuButton";
+import { InteriorFooter } from "./components/InteriorPage";
 
 const actions = [
   {
@@ -479,40 +479,6 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    const footer = document.querySelector<HTMLElement>(".poster-footer");
-    if (!footer) return;
-
-    let ticking = false;
-    const render = () => {
-      ticking = false;
-      const rect = footer.getBoundingClientRect();
-      const progress = Math.min(
-        1,
-        Math.max(0, (window.innerHeight - rect.top) / rect.height),
-      );
-
-      footer.style.setProperty("--footer-scale", String(0.18 + progress * 0.82));
-      footer.style.setProperty("--footer-offset", `${(1 - progress) * 86}px`);
-      footer.style.setProperty("--footer-opacity", String(0.42 + progress * 0.58));
-      footer.style.setProperty("--footer-copy-opacity", String(Math.max(0, (progress - 0.42) / 0.58)));
-    };
-
-    const requestRender = () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(render);
-    };
-
-    render();
-    window.addEventListener("scroll", requestRender, { passive: true });
-    window.addEventListener("resize", requestRender);
-    return () => {
-      window.removeEventListener("scroll", requestRender);
-      window.removeEventListener("resize", requestRender);
-    };
-  }, []);
-
-  useEffect(() => {
     let active = true;
 
     fetch(withBasePath("/api/note"))
@@ -617,30 +583,7 @@ export default function Home() {
         <CTA href="/contact">ANIMOS PROJECT に連絡する</CTA>
       </section>
 
-      <footer className="poster-footer">
-        <div className="footer-orb">
-          <a className="footer-home" href="#home">ANIMOS PROJECT</a>
-          <nav aria-label="フッターナビゲーション">
-            <Link href="/about">About</Link>
-            <Link href="/actions">Actions</Link>
-            <Link href="/news">News</Link>
-            <Link href="/contact">Contact</Link>
-          </nav>
-          <div className="footer-socials" aria-label="SNS・お問い合わせ">
-            {siteLinks.instagram ? (
-              <a href={siteLinks.instagram} target="_blank" rel="noreferrer">Instagram ↗</a>
-            ) : (
-              <span>Instagram</span>
-            )}
-            {siteLinks.email ? (
-              <a href={`mailto:${siteLinks.email}`}>Email ↗</a>
-            ) : (
-              <span>Email</span>
-            )}
-          </div>
-          <small>© 2026 ANIMOS PROJECT</small>
-        </div>
-      </footer>
+      <InteriorFooter homeHref="#home" />
     </main>
   );
 }
