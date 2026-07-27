@@ -25,6 +25,12 @@ test("exports every public page as static HTML", async () => {
     assert.match(html, /https:\/\/github\.com\/Dev-TRANs/);
     assert.match(html, /https:\/\/x\.com\/metsa_a/);
   }
+
+  assert.match(htmlFiles[0], /<title>ANIMOS PROJECT<\/title>/);
+  assert.match(htmlFiles[1], /<title>About Us \| ANIMOS PROJECT<\/title>/);
+  assert.match(htmlFiles[2], /<title>Actions \| ANIMOS PROJECT<\/title>/);
+  assert.match(htmlFiles[3], /<title>News \| ANIMOS PROJECT<\/title>/);
+  assert.match(htmlFiles[4], /<title>Contact \| ANIMOS PROJECT<\/title>/);
 });
 
 test("exports the note feed as static JSON", async () => {

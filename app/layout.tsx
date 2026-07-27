@@ -10,8 +10,8 @@ const homeDescription =
 export const metadata: Metadata = {
   metadataBase: new URL(`${siteUrl}/`),
   title: {
-    default: "アニモスプロジェクト",
-    template: "%s｜アニモスプロジェクト",
+    default: "ANIMOS PROJECT",
+    template: "%s | ANIMOS PROJECT",
   },
   description: homeDescription,
   alternates: {

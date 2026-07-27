@@ -22,7 +22,7 @@ export function createPageMetadata({
   path: string;
 }): Metadata {
   const pageUrl = `${siteUrl}${path === "/" ? "/" : `${path}/`}`;
-  const socialTitle = `${title}｜アニモスプロジェクト`;
+  const socialTitle = `${title} | ANIMOS PROJECT`;
 
   return {
     title,
