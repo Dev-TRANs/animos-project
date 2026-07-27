@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const siteUrl = (
   process.env.NEXT_PUBLIC_SITE_URL ??
-  "https://ehari-nishiki.github.io/animos-project"
+  "https://dev-trans.github.io/animos-project"
 ).replace(/\/$/, "");
 
 export const socialImage = {

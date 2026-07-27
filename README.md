@@ -16,10 +16,21 @@ npm run dev
 
 ```bash
 npm run lint
-npm run build:pages
+npm run build
 ```
 
 ## Deployment
 
-`main` ブランチへの push を契機に GitHub Actions が静的サイトを生成し、
-GitHub Pages へ自動デプロイします。
+Next.js の静的 export を使用します。ビルドすると `out` ディレクトリが生成されます。
+
+Cloudflare Pages:
+
+```txt
+Build command: npm run build
+Output directory: out
+```
+
+`@cloudflare/next-on-pages` は使用しません。
+
+GitHub Pages も、`main` ブランチへの push を契機に GitHub Actions が同じ静的サイトを
+生成して自動デプロイします。

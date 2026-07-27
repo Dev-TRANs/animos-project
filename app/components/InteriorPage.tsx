@@ -165,7 +165,16 @@ export function InteriorFooter({ homeHref }: { homeHref?: string } = {}) {
         </div>
         <div className="interior-footer-meta">
           <small>© 2026 ANIMOS PROJECT</small>
-          <small>powered by TRANs</small>
+          <small>
+            Website by{" "}
+            <a href="https://github.com/Dev-TRANs" target="_blank" rel="noreferrer">
+              <strong>TRANs</strong>
+            </a>
+            {" / "}Developed by{" "}
+            <a href="https://x.com/metsa_a" target="_blank" rel="noreferrer">
+              <strong>Metsa</strong>
+            </a>
+          </small>
         </div>
       </div>
     </footer>
