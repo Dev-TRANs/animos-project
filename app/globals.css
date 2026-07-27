@@ -13,14 +13,14 @@
 
 * { box-sizing: border-box; }
 html {
-  overscroll-behavior-y: none;
+  overscroll-behavior: none;
   scroll-behavior: smooth;
   scroll-padding-top: 80px;
 }
 body {
   margin: 0;
   overflow-x: clip;
-  overscroll-behavior-y: none;
+  overscroll-behavior: none;
   background: #fff;
   color: var(--black);
   font-family: var(--jp);

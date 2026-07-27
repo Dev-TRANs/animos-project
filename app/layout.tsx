@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { withBasePath } from "./base-path";
+import { ScrollBoundaryGuard } from "./components/ScrollBoundaryGuard";
 import { siteUrl, socialImage } from "./metadata-config";
 import "./globals.css";
 
@@ -56,7 +57,10 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <ScrollBoundaryGuard />
+        {children}
+      </body>
     </html>
   );
 }
