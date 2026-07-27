@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 export const siteUrl = (
   process.env.NEXT_PUBLIC_SITE_URL ??
+  process.env.CF_PAGES_URL ??
   "https://dev-trans.github.io/animos-project"
 ).replace(/\/$/, "");
 

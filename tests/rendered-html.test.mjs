@@ -39,3 +39,11 @@ test("exports the note feed as static JSON", async () => {
   assert.ok(Array.isArray(feed.items));
   assert.match(feed.accountUrl, /^https:\/\/note\.com\//);
 });
+
+test("exports a sitemap for every public page", async () => {
+  const sitemap = await readOutput("sitemap.xml");
+
+  for (const path of ["/", "/about/", "/actions/", "/news/", "/contact/"]) {
+    assert.match(sitemap, new RegExp(`<loc>https://[^<]+${path}</loc>`));
+  }
+});
