@@ -106,7 +106,7 @@ export default function AboutPage() {
         <div className="about-idea-formula">
           <span>防災</span><b>×</b><span>情報</span><b>×</b><EditableThemeWord />
         </div>
-        <p className="about-idea-hint">鼓動する「〇〇」をタップして、あなたのアイデアを聞かせてください。</p>
+        <p className="about-idea-hint">「〇〇」をタップして、あなたのアイデアを聞かせてください。</p>
       </section>
       <Link className="interior-next" href="/actions"><span>取り組みを見る</span><b>→</b></Link>
       <InteriorFooter />

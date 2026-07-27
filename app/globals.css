@@ -185,16 +185,15 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
 .close-vector {
   width: 20px;
   height: 23px;
-  overflow: visible;
+  overflow: hidden;
+  clip-path: inset(0 0 101% 0);
+  will-change: clip-path;
 }
 .close-vector path {
   fill: none;
-  opacity: 0;
   stroke: white;
   stroke-width: 1.65;
   stroke-linecap: round;
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1.08;
 }
 .menu-closed-state,
 .menu-open-state {
@@ -213,23 +212,14 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
 .menu-button[data-phase="hiding-menu"] .menu-vector path {
   animation: menu-path-hide 460ms cubic-bezier(.76,0,.24,1) both;
 }
-.menu-button[data-phase="showing-close"] .close-vector path {
-  animation: close-path-show 360ms cubic-bezier(.76,0,.24,1) both;
+.menu-button[data-phase="showing-close"] .close-vector {
+  animation: close-reveal 360ms cubic-bezier(.76,0,.24,1) both;
 }
-.menu-button[data-phase="showing-close"] .close-vector path:nth-child(2) {
-  animation-delay: 50ms;
+.menu-button[data-phase="open"] .close-vector {
+  clip-path: inset(0);
 }
-.menu-button[data-phase="hiding-close"] .close-vector path {
-  opacity: 1;
-  stroke-dashoffset: 0;
-  animation: close-path-hide 360ms cubic-bezier(.76,0,.24,1) both;
-}
-.menu-button[data-phase="open"] .close-vector path {
-  opacity: 1;
-  stroke-dashoffset: 0;
-}
-.menu-button[data-phase="hiding-close"] .close-vector path:nth-child(2) {
-  animation-delay: 35ms;
+.menu-button[data-phase="hiding-close"] .close-vector {
+  animation: close-conceal 360ms cubic-bezier(.76,0,.24,1) both;
 }
 .menu-button[data-phase="showing-menu"] .menu-vector path {
   animation: menu-path-show 460ms cubic-bezier(.76,0,.24,1) both;
@@ -250,15 +240,13 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   from { stroke-dashoffset: 1; }
   to { stroke-dashoffset: 0; }
 }
-@keyframes close-path-show {
-  0%, 4% { opacity: 0; stroke-dashoffset: 1.08; }
-  5% { opacity: 1; stroke-dashoffset: 1.08; }
-  100% { opacity: 1; stroke-dashoffset: 0; }
+@keyframes close-reveal {
+  from { clip-path: inset(0 0 101% 0); }
+  to { clip-path: inset(0); }
 }
-@keyframes close-path-hide {
-  from { opacity: 1; stroke-dashoffset: 0; }
-  96% { opacity: 1; }
-  to { opacity: 0; stroke-dashoffset: 1.08; }
+@keyframes close-conceal {
+  from { clip-path: inset(0); }
+  to { clip-path: inset(0 0 101% 0); }
 }
 @keyframes menu-label-out {
   from { opacity: 1; }
@@ -546,12 +534,10 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   letter-spacing: inherit;
   line-height: inherit;
 }
-.editable-theme-word:hover {
-  filter: brightness(1.08);
-}
 .editable-theme-text {
   display: inline-block;
   transform-origin: center;
+  transition: color .2s ease, text-shadow .2s ease;
 }
 .editable-theme-text.is-pulsing {
   animation: theme-word-heartbeat 1.8s ease-in-out infinite;
@@ -608,6 +594,7 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   font-size: 27px;
   line-height: 1;
   place-items: center;
+  transition: background .2s ease, color .2s ease, transform .2s ease;
 }
 .theme-editor-orb {
   position: absolute;
@@ -687,6 +674,7 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   border-radius: 999px;
   background: white;
   font-weight: 700;
+  transition: background .2s ease, border-color .2s ease, color .2s ease, transform .2s ease;
 }
 .theme-editor-actions button[type="submit"] {
   display: flex;
@@ -695,16 +683,39 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   border-color: var(--blue);
   background: var(--blue);
   color: white;
-  transition: background .2s ease, border-color .2s ease, transform .2s ease;
-}
-.theme-editor-actions button[type="submit"]:hover {
-  border-color: #0800c7;
-  background: #0800c7;
-  transform: translateY(-2px);
 }
 .theme-editor-actions button span {
   font-family: var(--en);
   font-size: 24px;
+  transition: transform .2s ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .editable-theme-word:hover .editable-theme-text {
+    color: var(--orange);
+    text-shadow: 0 0 18px rgba(255,146,0,.42);
+  }
+  .theme-editor-close:hover {
+    background: var(--orange);
+    color: var(--black);
+    transform: rotate(8deg) scale(1.06);
+  }
+  .theme-editor-field input:hover {
+    border-color: var(--blue);
+    background: white;
+  }
+  .theme-editor-actions button:not([type="submit"]):hover {
+    background: var(--black);
+    color: white;
+    transform: translateY(-2px);
+  }
+  .theme-editor-actions button[type="submit"]:hover {
+    border-color: #0800c7;
+    background: #0800c7;
+    transform: translateY(-2px);
+  }
+  .theme-editor-actions button[type="submit"]:hover span {
+    transform: translateX(4px);
+  }
 }
 @keyframes theme-backdrop-in {
   from { opacity: 0; }

@@ -5,9 +5,11 @@ import { useEffect, useRef, useState } from "react";
 type MenuPhase =
   | "closed"
   | "hiding-menu"
+  | "preparing-close"
   | "showing-close"
   | "open"
   | "hiding-close"
+  | "preparing-menu"
   | "showing-menu";
 
 export function AnimatedMenuButton({
@@ -51,25 +53,31 @@ export function AnimatedMenuButton({
       onToggle();
       setPhase("hiding-menu");
       schedule(() => {
-        setPhase("showing-close");
+        setPhase("preparing-close");
         schedule(() => {
-          setPhase("open");
-          busyRef.current = false;
-          setIsBusy(false);
-        }, 430);
+          setPhase("showing-close");
+          schedule(() => {
+            setPhase("open");
+            busyRef.current = false;
+            setIsBusy(false);
+          }, 430);
+        }, 34);
       }, 460);
       return;
     }
 
     setPhase("hiding-close");
     schedule(() => {
-      setPhase("showing-menu");
+      setPhase("preparing-menu");
       schedule(() => {
-        setPhase("closed");
-        busyRef.current = false;
-        setIsBusy(false);
-        onToggle();
-      }, 470);
+        setPhase("showing-menu");
+        schedule(() => {
+          setPhase("closed");
+          busyRef.current = false;
+          setIsBusy(false);
+          onToggle();
+        }, 470);
+      }, 34);
     }, 410);
   };
 

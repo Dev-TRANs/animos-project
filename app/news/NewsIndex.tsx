@@ -61,7 +61,7 @@ export default function NewsIndex() {
       <InteriorHeader current="News" />
       <InteriorHero
         eyebrow="NEWS"
-        title="活動のいまを、ひらいていく。"
+        title="活動のいまを、知る。"
         lead="プロジェクトからのお知らせ、地域での活動、そこで生まれた気づきをnoteからお届けします。"
       />
       <section className="news-index" aria-label="note記事一覧" aria-live="polite">
