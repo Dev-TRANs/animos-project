@@ -2,16 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { siteLinks } from "../site-config";
+import { navItems, siteLinks } from "../site-config";
 import { AnimatedMenuButton } from "./AnimatedMenuButton";
-
-const navItems = [
-  ["Home", "/"],
-  ["About Us", "/about"],
-  ["Actions", "/actions"],
-  ["News", "/news"],
-  ["Contact", "/contact"],
-];
 
 export function InteriorHeader({ current }: { current: string }) {
   const [isOpen, setIsOpen] = useState(false);

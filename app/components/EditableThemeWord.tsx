@@ -64,6 +64,8 @@ export function EditableThemeWord() {
     setSubmitMessage("送信中…");
 
     try {
+      // Apps Script does not return readable CORS headers. `no-cors` can confirm
+      // dispatch only; verify actual persistence in the Apps Script execution log.
       await fetch(endpoint, {
         method: "POST",
         mode: "no-cors",

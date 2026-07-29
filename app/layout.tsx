@@ -44,7 +44,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ja">
+    // Some iPhone preview/remote-browser layers inject an attribute into <html>
+    // before React hydrates. Suppress that external-only attribute mismatch here.
+    <html lang="ja" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

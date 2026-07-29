@@ -1,36 +1,37 @@
-# Animos Project
+# ANIMOS PROJECT
 
 「誰も取り残さない地域防災」をテーマに、地域・情報・福祉をデジタルでつなぐ
-アニモスプロジェクトの公式ウェブサイトです。
+ANIMOS PROJECTの公式ウェブサイトです。
 
-## Development
+## ローカル開発
 
-Node.js 22 以降が必要です。
+Node.js 22以降が必要です。
 
 ```bash
 npm install
 npm run dev
 ```
 
-## Checks
+変更前後の確認には、次を実行します。
 
 ```bash
 npm run lint
 npm run build
+npm test
 ```
 
-## Deployment
+## 公開
 
-Next.js の静的 export を使用します。ビルドすると `out` ディレクトリが生成されます。
-
-Cloudflare Pages:
+本番はCloudflare Pagesで運用しています。GitHubリポジトリの本番ブランチへ
+pushすると、Cloudflare Pagesが自動的にビルド・公開します。
 
 ```txt
 Build command: npm run build
 Output directory: out
 ```
 
-`@cloudflare/next-on-pages` は使用しません。
+このサイトはNext.jsの静的exportです。実行時サーバーやデータベースを
+必要としません。
 
-GitHub Pages も、`main` ブランチへの push を契機に GitHub Actions が同じ静的サイトを
-生成して自動デプロイします。
+引き継ぎ、コンテンツ更新、外部連携、公開前チェックについては
+[保守ガイド](docs/MAINTENANCE.md)を参照してください。

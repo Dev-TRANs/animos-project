@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 
+// Canonical URLs, sitemap URLs and social cards must use the same production host.
+// Change this value first when the public domain changes.
 export const siteUrl = "https://animos.stki.org";
 
 export const socialImage = {
