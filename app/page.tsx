@@ -5,6 +5,7 @@ import Link from "next/link";
 import { withBasePath } from "./base-path";
 import { AnimatedMenuButton } from "./components/AnimatedMenuButton";
 import { InteriorFooter } from "./components/InteriorPage";
+import { navItems } from "./site-config";
 
 const actions = [
   {
@@ -78,14 +79,6 @@ type NewsItem = {
   thumbnail?: string;
 };
 
-const navItems = [
-  ["Home", "/"],
-  ["About Us", "/about"],
-  ["Actions", "/actions"],
-  ["News", "/news"],
-  ["Contact", "/contact"],
-];
-
 function CTA({ href, children }: { href: string; children: React.ReactNode }) {
   return (
     <a className="poster-cta" href={withBasePath(href)}>
@@ -98,6 +91,13 @@ function CTA({ href, children }: { href: string; children: React.ReactNode }) {
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
+
+  const handleHomeLogoClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    // Header is rendered only on the home page. Keep a real link for semantics and
+    // no-JavaScript fallback, but avoid reloading the page when returning to its top.
+    event.preventDefault();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   useEffect(() => {
     document.body.classList.toggle("menu-is-open", isOpen);
@@ -115,7 +115,13 @@ function Header() {
   }, []);
 
   useEffect(() => {
-    const onScroll = () => setIsSticky(window.scrollY > window.innerHeight * 0.72);
+    let lastSticky: boolean | null = null;
+    const onScroll = () => {
+      const nextSticky = window.scrollY > window.innerHeight * 0.72;
+      if (nextSticky === lastSticky) return;
+      lastSticky = nextSticky;
+      setIsSticky(nextSticky);
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -124,7 +130,9 @@ function Header() {
   return (
     <header className={`poster-header${isSticky ? " is-sticky" : ""}`}>
       <div className="header-brand-row">
-        <Link className="wordmark" href="/">Animos Project</Link>
+        <Link className="wordmark" href="/" onClick={handleHomeLogoClick}>
+          Animos Project
+        </Link>
         <nav className="desktop-nav" aria-label="デスクトップナビゲーション">
           {navItems.map(([label, href]) => (
             <a key={href} href={withBasePath(href)}>{label}</a>
@@ -153,6 +161,7 @@ function Hero({
   const heroRef = useRef<HTMLElement>(null);
   const circleRefs = useRef<Array<HTMLElement | null>>([]);
   const morphRef = useRef<HTMLSpanElement>(null);
+  const morphGradientRef = useRef<HTMLSpanElement>(null);
   const morphLayoutRef = useRef<{
     sourceX: number;
     sourceY: number;
@@ -173,6 +182,20 @@ function Hero({
 
   useEffect(() => {
     let ticking = false;
+    let frame = 0;
+    let needsMeasure = false;
+    let heroHeight = 1;
+    let measuredViewportWidth = 0;
+    let morphHasArrived: boolean | null = null;
+    let renderUntil = 0;
+    // These arrays remember the last DOM state. Avoid rewriting styles for all
+    // 84 circles on every scroll frame, which is especially expensive on iOS.
+    const circlePhases = new Int8Array(circles.length);
+    const circleCompositing = new Int8Array(circles.length);
+    const circleOpacities = new Float32Array(circles.length);
+    circlePhases.fill(-1);
+    circleCompositing.fill(-1);
+    circleOpacities.fill(-1);
 
     const measure = () => {
       const hero = heroRef.current;
@@ -181,6 +204,8 @@ function Hero({
       const source = circleRefs.current[morphIndex];
       if (!hero || !morph || !target || !source) return;
 
+      heroHeight = hero.offsetHeight;
+      measuredViewportWidth = window.innerWidth;
       const sourceRect = source.getBoundingClientRect();
       const size = sourceRect.width;
       target.style.width = `${size}px`;
@@ -198,70 +223,116 @@ function Hero({
         targetY: targetRect.top + window.scrollY + targetRect.height / 2 - size / 2,
         size,
       };
+      target.style.transform = "scale(1)";
+      circlePhases.fill(-1);
+      circleCompositing.fill(-1);
+      circleOpacities.fill(-1);
+      morphHasArrived = null;
     };
 
-    const render = () => {
-      ticking = false;
+    const render = (now = performance.now()) => {
+      if (needsMeasure) {
+        needsMeasure = false;
+        measure();
+      }
       const hero = heroRef.current;
       if (!hero) return;
-      const heroHeight = hero.offsetHeight;
-      const progress = Math.min(1, Math.max(0, window.scrollY / heroHeight));
+      const scrollY = window.scrollY;
+      const progress = Math.min(1, Math.max(0, scrollY / heroHeight));
 
       circleRefs.current.forEach((circle, index) => {
         if (!circle) return;
         if (index === morphIndex) {
-          circle.style.opacity = "0";
+          if (circlePhases[index] !== 2) {
+            circle.style.opacity = "0";
+            circlePhases[index] = 2;
+            circleOpacities[index] = 0;
+          }
           return;
         }
         if (index === scrollIndex) {
-          circle.style.opacity = "1";
-          circle.style.transform = "scale(1)";
+          if (circlePhases[index] !== 0) {
+            circle.style.opacity = "1";
+            circle.style.transform = "scale(1)";
+            circlePhases[index] = 0;
+            circleOpacities[index] = 1;
+          }
           return;
         }
         const start = 0.06 + circles[index].order * 0.48;
         const local = Math.min(1, Math.max(0, (progress - start) / 0.18));
+        const shouldComposite = progress > start - 0.025 && local < 1;
+        if (circleCompositing[index] !== Number(shouldComposite)) {
+          circle.classList.toggle("is-animating", shouldComposite);
+          circleCompositing[index] = Number(shouldComposite);
+        }
+        const phase = local <= 0 ? 0 : local >= 1 ? 2 : 1;
+        if (phase !== 1 && circlePhases[index] === phase) return;
         const eased = 1 - Math.pow(1 - local, 4);
+        const opacity = local <= 0.94 ? 1 : Math.max(0, (1 - local) / 0.06);
         circle.style.transform = `scale(${1 - eased})`;
-        circle.style.opacity = local > 0.94 ? "0" : "1";
+        if (Math.abs(circleOpacities[index] - opacity) > 0.001) {
+          circle.style.opacity = String(opacity);
+          circleOpacities[index] = opacity;
+        }
+        circlePhases[index] = phase;
       });
 
       const morph = morphRef.current;
+      const gradient = morphGradientRef.current;
       const target = targetRef.current;
       const layout = morphLayoutRef.current;
-      if (morph && target && layout) {
+      if (morph && gradient && target && layout) {
         const move = Math.min(1, Math.max(0, (progress - 0.08) / 0.74));
         const eased = 1 - Math.pow(1 - move, 3);
-        const x = layout.sourceX + (layout.targetX - layout.sourceX) * eased - window.scrollX;
-        const y = layout.sourceY + (layout.targetY - layout.sourceY) * eased - window.scrollY;
-        morph.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-        morph.style.setProperty("--gradient-progress", String(eased));
         const hasArrived = move >= 0.995;
-        morph.style.opacity = hasArrived ? "0" : "1";
-        target.style.opacity = hasArrived ? "1" : "0";
-        target.style.transform = "scale(1)";
+        if (!hasArrived) {
+          const x = layout.sourceX + (layout.targetX - layout.sourceX) * eased;
+          const y = layout.sourceY + (layout.targetY - layout.sourceY) * eased;
+          morph.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+          gradient.style.opacity = String(eased);
+        }
+        if (hasArrived !== morphHasArrived) {
+          morph.style.opacity = hasArrived ? "0" : "1";
+          target.style.opacity = hasArrived ? "1" : "0";
+          morphHasArrived = hasArrived;
+        }
+      }
+
+      // iOS may deliver scroll events less often than the display refresh rate.
+      // Continue briefly so the latest scroll position is rendered every frame.
+      if (now < renderUntil) {
+        ticking = true;
+        frame = requestAnimationFrame(render);
+      } else {
+        ticking = false;
       }
     };
 
-    const onScroll = () => {
+    const requestRender = (remeasure = false, sustain = false) => {
+      needsMeasure ||= remeasure;
+      if (sustain) renderUntil = Math.max(renderUntil, performance.now() + 120);
       if (!ticking) {
         ticking = true;
-        requestAnimationFrame(render);
+        frame = requestAnimationFrame(render);
       }
     };
 
     measure();
     render();
-    window.addEventListener("scroll", onScroll, { passive: true });
+    const onScroll = () => requestRender(false, true);
     const onResize = () => {
-      measure();
-      onScroll();
+      const widthChanged = Math.abs(window.innerWidth - measuredViewportWidth) > 1;
+      requestRender(widthChanged);
     };
+    window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize);
     return () => {
+      cancelAnimationFrame(frame);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
     };
-  }, [circles]);
+  }, [circles, targetRef]);
 
   return (
     <>
@@ -310,7 +381,9 @@ function Hero({
           </div>
         </div>
       </section>
-      <span className="transition-circle" ref={morphRef} aria-hidden="true" />
+      <span className="transition-circle" ref={morphRef} aria-hidden="true">
+        <span className="transition-circle-gradient" ref={morphGradientRef} />
+      </span>
     </>
   );
 }
@@ -407,7 +480,7 @@ function ActionsCarousel() {
             data-action-index={index}
             ref={(node) => { cardRefs.current[index] = node; }}
           >
-            <img src={action.image} alt="" />
+            <img src={action.image} alt="" loading="lazy" decoding="async" />
             <h3>{action.title}</h3>
             <p>{action.description}</p>
             <span className="action-number">#{action.number}</span>
@@ -549,7 +622,7 @@ export default function Home() {
           {newsItems.map((item) => {
             const content = (
               <>
-                {item.thumbnail && <img src={item.thumbnail} alt="" />}
+                {item.thumbnail && <img src={item.thumbnail} alt="" loading="lazy" decoding="async" />}
                 <time>{item.date}</time>
                 <h3>{item.title}</h3>
                 <span aria-hidden="true">→</span>

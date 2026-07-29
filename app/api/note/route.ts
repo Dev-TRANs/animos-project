@@ -5,6 +5,8 @@ const configuredNoteUrl =
 
 export const dynamic = "force-static";
 
+// This route runs during `next build` and becomes the static file `out/api/note`.
+// A new note post therefore appears only after Cloudflare Pages rebuilds the site.
 function decodeXml(value: string) {
   return value
     .replace(/^<!\[CDATA\[|\]\]>$/g, "")

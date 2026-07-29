@@ -12,6 +12,8 @@ type MenuPhase =
   | "preparing-menu"
   | "showing-menu";
 
+// MenuPhase values are consumed by CSS `[data-phase]` selectors. Keep phase
+// names and the timeout durations in sync with the path animations in globals.css.
 export function AnimatedMenuButton({
   isOpen,
   onToggle,

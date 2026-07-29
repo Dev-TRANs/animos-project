@@ -4,24 +4,30 @@ import { useEffect } from "react";
 
 export function ScrollBoundaryGuard() {
   useEffect(() => {
-    let previousTouchY = 0;
     let frame = 0;
+    let contentBottom = 0;
+    let maxScroll = 0;
+    let measuredViewportWidth = window.innerWidth;
 
     const isInsideScrollableOverlay = (target: EventTarget | null) => (
       target instanceof Element && Boolean(target.closest(".theme-editor-backdrop"))
     );
 
-    const getMaxScroll = () => {
+    const updateMaxScroll = () => {
+      maxScroll = Math.max(0, contentBottom - window.innerHeight);
+    };
+
+    const measureMaxScroll = () => {
       const footer = document.querySelector<HTMLElement>("main > footer:last-child");
       const scrollingElement = document.scrollingElement ?? document.documentElement;
-      const contentBottom = footer
+      contentBottom = footer
         ? footer.getBoundingClientRect().bottom + scrollingElement.scrollTop
         : scrollingElement.scrollHeight;
-      return Math.max(0, contentBottom - window.innerHeight);
+      measuredViewportWidth = window.innerWidth;
+      updateMaxScroll();
     };
 
     const clampToPage = () => {
-      const maxScroll = getMaxScroll();
       if (window.scrollY < 0) {
         window.scrollTo(0, 0);
       } else if (window.scrollY > maxScroll + 1) {
@@ -34,26 +40,34 @@ export function ScrollBoundaryGuard() {
       frame = requestAnimationFrame(clampToPage);
     };
 
-    const handleTouchStart = (event: TouchEvent) => {
-      if (event.touches.length === 1) previousTouchY = event.touches[0].clientY;
+    const requestMeasureAndClamp = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        measureMaxScroll();
+        clampToPage();
+      });
     };
 
-    const handleTouchMove = (event: TouchEvent) => {
-      if (event.touches.length !== 1 || isInsideScrollableOverlay(event.target)) return;
-      const currentTouchY = event.touches[0].clientY;
-      const movement = currentTouchY - previousTouchY;
-      previousTouchY = currentTouchY;
-      const maxScroll = getMaxScroll();
-      const projectedScroll = window.scrollY - movement;
-      if (projectedScroll < 0 || projectedScroll > maxScroll) {
-        if (event.cancelable) event.preventDefault();
-        window.scrollTo(0, Math.min(maxScroll, Math.max(0, projectedScroll)));
-      }
+    const requestViewportClamp = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        // Safari changes viewport height while its address bar opens/closes.
+        // Re-measuring layout for those height-only changes causes scroll jank.
+        if (Math.abs(window.innerWidth - measuredViewportWidth) > 1) {
+          measureMaxScroll();
+        } else {
+          updateMaxScroll();
+        }
+        clampToPage();
+      });
+    };
+
+    const handleScroll = () => {
+      if (window.scrollY < 0 || window.scrollY > maxScroll + 1) requestClamp();
     };
 
     const handleWheel = (event: WheelEvent) => {
       if (isInsideScrollableOverlay(event.target)) return;
-      const maxScroll = getMaxScroll();
       const projectedScroll = window.scrollY + event.deltaY;
       if (projectedScroll < 0 || projectedScroll > maxScroll) {
         if (event.cancelable) event.preventDefault();
@@ -61,31 +75,31 @@ export function ScrollBoundaryGuard() {
       }
     };
 
-    const delayedClamps = [0, 250, 1000].map((delay) => (
-      window.setTimeout(requestClamp, delay)
+    measureMaxScroll();
+    const delayedClamps = [250, 1000].map((delay) => (
+      window.setTimeout(requestMeasureAndClamp, delay)
     ));
+    const resizeObserver = new ResizeObserver(requestMeasureAndClamp);
+    resizeObserver.observe(document.querySelector("main") ?? document.documentElement);
 
-    document.addEventListener("touchstart", handleTouchStart, { passive: true });
-    document.addEventListener("touchmove", handleTouchMove, { passive: false });
     document.addEventListener("touchend", requestClamp, { passive: true });
     document.addEventListener("wheel", handleWheel, { passive: false });
-    window.addEventListener("scroll", requestClamp, { passive: true });
-    window.addEventListener("resize", requestClamp);
-    window.addEventListener("pageshow", requestClamp);
-    window.visualViewport?.addEventListener("resize", requestClamp);
-    window.visualViewport?.addEventListener("scroll", requestClamp);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", requestViewportClamp);
+    window.addEventListener("pageshow", requestMeasureAndClamp);
+    window.visualViewport?.addEventListener("resize", requestViewportClamp);
+    window.visualViewport?.addEventListener("scroll", handleScroll);
     return () => {
       cancelAnimationFrame(frame);
       delayedClamps.forEach(window.clearTimeout);
-      document.removeEventListener("touchstart", handleTouchStart);
-      document.removeEventListener("touchmove", handleTouchMove);
+      resizeObserver.disconnect();
       document.removeEventListener("touchend", requestClamp);
       document.removeEventListener("wheel", handleWheel);
-      window.removeEventListener("scroll", requestClamp);
-      window.removeEventListener("resize", requestClamp);
-      window.removeEventListener("pageshow", requestClamp);
-      window.visualViewport?.removeEventListener("resize", requestClamp);
-      window.visualViewport?.removeEventListener("scroll", requestClamp);
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", requestViewportClamp);
+      window.removeEventListener("pageshow", requestMeasureAndClamp);
+      window.visualViewport?.removeEventListener("resize", requestViewportClamp);
+      window.visualViewport?.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
