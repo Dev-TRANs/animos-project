@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 const outputRoot = new URL("../out/", import.meta.url);
+const googleSiteVerification = "U3N1SPErYZ6hcrPgWswh8WCyACwLkJXfE7c7QNofrBQ";
 
 async function readOutput(path) {
   return readFile(new URL(path, outputRoot), "utf8");
@@ -24,6 +25,10 @@ test("exports every public page as static HTML", async () => {
     assert.match(html, /ANIMOS PROJECT/);
     assert.match(html, /https:\/\/github\.com\/Dev-TRANs/);
     assert.match(html, /https:\/\/x\.com\/metsa_a/);
+    assert.match(
+      html,
+      new RegExp(`<meta name="google-site-verification" content="${googleSiteVerification}"\\s*\\/?`),
+    );
   }
 
   assert.match(htmlFiles[0], /<title>ANIMOS PROJECT<\/title>/);

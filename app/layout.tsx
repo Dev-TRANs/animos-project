@@ -17,6 +17,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: `${siteUrl}/`,
   },
+  verification: {
+    google: "U3N1SPErYZ6hcrPgWswh8WCyACwLkJXfE7c7QNofrBQ",
+  },
   icons: {
     icon: withBasePath("/animos-logo.png"),
     shortcut: withBasePath("/animos-logo.png"),
