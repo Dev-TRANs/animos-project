@@ -9,10 +9,6 @@ export function ScrollBoundaryGuard() {
     let maxScroll = 0;
     let measuredViewportWidth = window.innerWidth;
 
-    const isInsideScrollableOverlay = (target: EventTarget | null) => (
-      target instanceof Element && Boolean(target.closest(".theme-editor-backdrop"))
-    );
-
     const updateMaxScroll = () => {
       maxScroll = Math.max(0, contentBottom - window.innerHeight);
     };
@@ -66,15 +62,6 @@ export function ScrollBoundaryGuard() {
       if (window.scrollY < 0 || window.scrollY > maxScroll + 1) requestClamp();
     };
 
-    const handleWheel = (event: WheelEvent) => {
-      if (isInsideScrollableOverlay(event.target)) return;
-      const projectedScroll = window.scrollY + event.deltaY;
-      if (projectedScroll < 0 || projectedScroll > maxScroll) {
-        if (event.cancelable) event.preventDefault();
-        window.scrollTo(0, Math.min(maxScroll, Math.max(0, projectedScroll)));
-      }
-    };
-
     measureMaxScroll();
     const delayedClamps = [250, 1000].map((delay) => (
       window.setTimeout(requestMeasureAndClamp, delay)
@@ -82,8 +69,10 @@ export function ScrollBoundaryGuard() {
     const resizeObserver = new ResizeObserver(requestMeasureAndClamp);
     resizeObserver.observe(document.querySelector("main") ?? document.documentElement);
 
+    // Never intercept wheel/touchmove here. Desktop and mobile Safari perform
+    // scrolling asynchronously; canceling those events can freeze the page when
+    // its cached height has not settled yet. Passive correction is sufficient.
     document.addEventListener("touchend", requestClamp, { passive: true });
-    document.addEventListener("wheel", handleWheel, { passive: false });
     window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("resize", requestViewportClamp);
     window.addEventListener("pageshow", requestMeasureAndClamp);
@@ -94,7 +83,6 @@ export function ScrollBoundaryGuard() {
       delayedClamps.forEach(window.clearTimeout);
       resizeObserver.disconnect();
       document.removeEventListener("touchend", requestClamp);
-      document.removeEventListener("wheel", handleWheel);
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", requestViewportClamp);
       window.removeEventListener("pageshow", requestMeasureAndClamp);
